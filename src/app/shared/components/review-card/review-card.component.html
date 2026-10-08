@@ -1,1 +1,6 @@
-<p>review-card works!</p>
+<article class="review-card">
+    <header class="reviewer-row"><span class="review-avatar">{{ review.reviewer.slice(0,1) || '?' }}</span><div class="reviewer-info"><b>{{ review.reviewer }} <small>{{ review.reviewerLevel }}</small></b><span>{{ review.date }} <i *ngIf="review.verified">· Purchase verified</i></span></div><app-rating-stars [rating]="review.rating"></app-rating-stars></header>
+    <div class="review-meta"><span>{{ review.product }}</span><app-credibility-badge [score]="review.credibilityScore"></app-credibility-badge></div>
+    <h3>{{ review.title }}</h3><p>{{ review.body }}</p>
+    <footer class="review-actions"><button type="button" (click)="markHelpful()">{{ helpfulClicked ? '✓ Helpful' : '♡ Helpful' }} ({{ review.helpfulCount + (helpfulClicked ? 1 : 0) }})</button><button type="button">▢ Comments</button><button type="button">⚑ Report</button></footer>
+  </article>
