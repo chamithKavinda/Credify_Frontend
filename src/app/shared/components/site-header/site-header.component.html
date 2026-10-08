@@ -5,10 +5,15 @@
     </a>
   
     <nav class="main-nav" aria-label="Main navigation">
-      <a class="active" routerLink="/">Explore</a>
-      <a href="#how-it-works">How Credify Works</a>
-      <a href="#categories">Categories</a>
+      <a routerLink="/search" routerLinkActive="active">Explore</a>
+      <a routerLink="/how-it-works" routerLinkActive="active">How Credify Works</a>
+      <a routerLink="/" fragment="featured">Categories</a>
     </nav>
+    <form class="nav-search" (submit)="$event.preventDefault(); search()">
+      <span aria-hidden="true">⌕</span>
+      <input name="headerSearch" type="search" [(ngModel)]="searchText" placeholder="Search reviews & companies..." aria-label="Search reviews and companies">
+      <button type="submit" aria-label="Search">→</button>
+    </form>
   
     <label class="nav-search">
       <span aria-hidden="true">⌕</span>
