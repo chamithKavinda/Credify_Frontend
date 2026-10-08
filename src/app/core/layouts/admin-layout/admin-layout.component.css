@@ -1,0 +1,10 @@
+@import '../user-layout/user-layout.component.css';
+
+.admin-layout {
+  background: var(--color-slate-900);
+  color: var(--color-slate-100);
+}
+
+.admin-layout .portal-content {
+  background: #0b1120;
+}

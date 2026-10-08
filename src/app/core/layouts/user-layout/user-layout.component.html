@@ -1,1 +1,6 @@
-<a routerLink="/user/settings" routerLinkActive="current">⚙ <span>Settings</span></a>
+<div class="portal-layout">
+  <app-user-sidebar></app-user-sidebar>
+  <main class="portal-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

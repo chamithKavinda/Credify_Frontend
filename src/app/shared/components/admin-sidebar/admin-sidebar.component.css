@@ -1,0 +1,44 @@
+@import '../user-sidebar/user-sidebar.component.css';
+
+.admin-theme {
+  background: var(--color-slate-900);
+  border-right: 1px solid var(--color-slate-800);
+  color: var(--color-slate-300);
+}
+
+.admin-theme .brand {
+  color: #ffffff;
+}
+
+.admin-badge {
+  background: rgba(124, 58, 237, 0.2);
+  color: var(--color-teal-light);
+  border: 1px solid rgba(124, 58, 237, 0.4);
+}
+
+.admin-theme .nav-links a {
+  color: var(--color-slate-400);
+}
+
+.admin-theme .nav-links a:hover {
+  background: var(--color-slate-800);
+  color: #ffffff;
+}
+
+.admin-theme .nav-links a.active {
+  background: var(--color-primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-glow);
+}
+
+.admin-theme .sidebar-header, .admin-theme .sidebar-footer {
+  border-color: var(--color-slate-800);
+}
+
+.admin-theme .back-home {
+  color: var(--color-slate-400);
+}
+
+.admin-theme .back-home:hover {
+  color: #ffffff;
+}

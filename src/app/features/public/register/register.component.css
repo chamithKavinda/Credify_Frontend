@@ -1,2 +1,77 @@
 @import '../sign-in/sign-in.component.css';
-.register-card{width:min(510px,100%)}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.register-card select{height:39px;border:1px solid #dfe5f2;border-radius:8px;padding:0 10px;background:white;color:#46536c;font-size:11px}.password-strength{display:flex;gap:5px;align-items:center;margin:8px 0 12px}.password-strength i{height:4px;flex:1;border-radius:4px;background:#0b9c8d}.password-strength small{font-size:8px;color:#748097;margin-left:6px}.agreement{font-weight:500!important;line-height:1.5}.agreement a,.switch-auth a{color:#5144ed;text-decoration:none}.switch-auth{text-align:center;color:#758097;font-size:10px;margin:14px 0 0}@media(max-width:450px){.form-row{grid-template-columns:1fr}}
+
+.register-card {
+  max-width: 580px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.register-card select {
+  height: 48px;
+  border: 1.5px solid var(--color-slate-200);
+  border-radius: var(--radius-md);
+  padding: 0 16px;
+  background: #ffffff;
+  color: var(--color-slate-900);
+  font-size: 15px;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.register-card select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px var(--color-primary-glow);
+}
+
+.password-strength {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin: -6px 0 16px;
+}
+
+.password-strength i {
+  height: 5px;
+  flex: 1;
+  border-radius: 4px;
+  background: var(--color-emerald);
+}
+
+.password-strength small {
+  font-size: 12px;
+  color: var(--color-slate-500);
+  margin-left: 8px;
+  white-space: nowrap;
+}
+
+.agreement {
+  font-weight: 500 !important;
+  line-height: 1.5;
+  font-size: 13px !important;
+  color: var(--color-slate-600) !important;
+  margin: 12px 0 20px !important;
+}
+
+.agreement a, .switch-auth a {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.switch-auth {
+  text-align: center;
+  color: var(--color-slate-600);
+  font-size: 14px;
+  margin: 20px 0 0;
+}
+
+@media (max-width: 540px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

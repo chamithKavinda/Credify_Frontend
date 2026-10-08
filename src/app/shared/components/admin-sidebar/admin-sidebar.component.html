@@ -1,1 +1,38 @@
-<p>admin-sidebar works!</p>
+<aside class="sidebar-nav admin-theme">
+  <div class="sidebar-header">
+    <a class="brand" routerLink="/">
+      <span class="brand-mark">✓</span>
+      <span>Credify</span>
+    </a>
+    <span class="portal-badge admin-badge">Admin</span>
+  </div>
+  <nav class="nav-links">
+    <a routerLink="/admin/dashboard" routerLinkActive="active">
+      <span class="nav-icon">📈</span>
+      <span>Overview</span>
+    </a>
+    <a routerLink="/admin/reviews" routerLinkActive="active">
+      <span class="nav-icon">🛡️</span>
+      <span>Review Control</span>
+    </a>
+    <a routerLink="/admin/reports" routerLinkActive="active">
+      <span class="nav-icon">📊</span>
+      <span>Analytics</span>
+    </a>
+    <a routerLink="/admin/users" routerLinkActive="active">
+      <span class="nav-icon">👥</span>
+      <span>Users</span>
+    </a>
+    <a routerLink="/admin/badge-rules" routerLinkActive="active">
+      <span class="nav-icon">🏅</span>
+      <span>Badge Rules</span>
+    </a>
+    <a routerLink="/admin/settings" routerLinkActive="active">
+      <span class="nav-icon">⚙️</span>
+      <span>Platform Settings</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <a routerLink="/" class="back-home">← Main Site</a>
+  </div>
+</aside>
