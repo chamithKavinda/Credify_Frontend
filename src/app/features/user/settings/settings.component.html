@@ -1,0 +1,27 @@
+<span class="kicker">REVIEWER WORKSPACE · ACCOUNT PREFERENCES</span>
+<h1 class="panel-title">Settings</h1>
+<p class="panel-lead">Manage your account details, privacy and notification preferences.</p>
+<p class="saved-message" *ngIf="saved">Your settings were saved for this demo.</p>
+<div class="settings-columns">
+  <section class="settings-card">
+    <h2>Profile information</h2>
+    <p>These details control how your contributor profile appears.</p>
+    <label>Display name<input [(ngModel)]="displayName" name="displayName"></label>
+    <label>Email address<input [(ngModel)]="email" name="email" type="email" disabled></label>
+    <label class="toggle-row">Show my profile publicly <input type="checkbox" [(ngModel)]="publicProfile" name="publicProfile"></label>
+  </section>
+  <section class="settings-card">
+    <h2>Notifications</h2>
+    <p>Choose which Credify updates you want to receive.</p>
+    <label class="toggle-row">Product alerts <input type="checkbox" [(ngModel)]="productAlerts" name="productAlerts"></label>
+    <label class="toggle-row">Review status updates <input type="checkbox" [(ngModel)]="reviewUpdates" name="reviewUpdates"></label>
+    <label class="toggle-row">Security notices <input type="checkbox" [(ngModel)]="securityAlerts" name="securityAlerts"></label>
+  </section>
+  <section class="settings-card security-card">
+    <h2>Security</h2>
+    <p>Update your password and review active sign-in sessions.</p>
+    <button type="button" class="secondary-action">Change password</button>
+    <button type="button" class="secondary-action">View active sessions</button>
+  </section>
+</div>
+<button class="primary-action" (click)="save()">Save Settings</button>
