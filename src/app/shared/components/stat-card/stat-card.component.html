@@ -1,1 +1,5 @@
-<p>stat-card works!</p>
+<article class="stat-card" [ngClass]="tone">
+    <div class="stat-top"><span>{{ label }}</span><i>{{ icon }}</i></div>
+    <strong>{{ value }}</strong>
+    <small>{{ detail }}</small>
+  </article>
