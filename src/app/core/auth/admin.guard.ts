@@ -2,10 +2,9 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-export const authGuard: CanActivateFn = (_route, state) => {
+export const adminGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
-  return auth.isAuthenticated()
-    ? true
-    : router.createUrlTree(['/sign-in'], { queryParams: { returnUrl: state.url } });
+  if (!auth.isAuthenticated()) return router.createUrlTree(['/sign-in']);
+  return auth.isAdmin() ? true : router.createUrlTree(['/user/dashboard']);
 };
