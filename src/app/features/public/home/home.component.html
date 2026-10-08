@@ -1,1 +1,65 @@
-<p>home works!</p>
+<app-site-header></app-site-header>
+<main>
+  <section class="hero">
+    <div class="hero-glow glow-one"></div><div class="hero-glow glow-two"></div>
+    <div class="hero-content">
+      <div class="eyebrow"><span class="live-dot"></span> CREDIFY ENGINE ACTIVE <b>·</b> 42,890 Reviews This Week</div>
+      <h1>Reviews with more context.<br><span>Decisions with more confidence.</span></h1>
+      <p>Credify combines authentic community feedback with transparent AI authenticity<br class="desktop-break"> analysis to help you make smarter decisions with trust.</p>
+
+      <form class="search-box" (submit)="$event.preventDefault(); search()">
+        <select aria-label="Choose category" (change)="selectedCategory = $any($event.target).value">
+          <option>All Categories</option>
+          <option *ngFor="let category of categories">{{ category }}</option>
+        </select>
+        <input type="search" placeholder="Search products, services, brands, or review topics..." aria-label="Search products" (input)="searchText = $any($event.target).value">
+        <button class="button button-primary" type="submit">Search Reviews <span>→</span></button>
+      </form>
+
+      <div class="popular"><span>POPULAR:</span><a *ngFor="let category of categories" href="#featured">✦ {{ category }}</a></div>
+    </div>
+  </section>
+
+  <section class="distinction">
+    <strong>✦ The Credify Distinction:</strong>
+    <span>⭐ Star Rating (1–5) <small>= How much the buyer liked the product</small></span>
+    <span>⛨ Credibility Score (0–100) <small>= How genuine and trustworthy the review is</small></span>
+  </section>
+
+  <section class="section how-section" id="how-it-works">
+    <div class="section-heading split-heading">
+      <div><label class="kicker">SCIENTIFIC RIGOR</label><h2>How Credify Protects Truth</h2></div>
+      <p>A multi-layered authenticity engine designed to separate sincere consumer sentiment from incentivized review manipulation.</p>
+    </div>
+    <div class="steps-grid">
+      <article class="step-card"><div class="step-number">01</div><div class="step-icon">▤</div><h3>Read Genuine Experiences</h3><p>Community reviews with verified purchase contexts, structured pros and cons, and time-tested usage notes across days, weeks, and months of real use.</p><div class="mini-metric"><b>✓ Verified Buyer</b><span>6 Months In Use</span><i></i></div></article>
+      <article class="step-card"><div class="step-number teal">02</div><div class="step-icon teal-bg">⌘</div><h3>AI Authenticity Analysis</h3><p>Real-time linguistic scanning measuring semantic depth, repetitive copy bursts, unnatural sentiment polarity, and synchronized review blitzes.</p><div class="mini-metric"><b>Burst Velocity Analysis</b><span>Optimal</span><i></i></div></article>
+      <article class="step-card"><div class="step-number">03</div><div class="step-icon">⚖</div><h3>Understand Credibility</h3><p>Never get misled by inflated 5-star blitzes. Clearly distinguish customer satisfaction from independent review credibility and reviewer trust score.</p><div class="score-row"><span>★ 4.8 <small>Star Score</small></span><b>96/100 <small>Authenticity</small></b></div></article>
+    </div>
+  </section>
+
+  <section class="section featured-section" id="featured">
+    <div class="section-heading"><div><label class="kicker">LIVE VERIFIED INTELLIGENCE</label><h2>Featured Product Evaluations</h2><p>Compare satisfaction against verified review credibility scores side-by-side.</p></div><a class="text-link" routerLink="/search">View all analyzed products →</a></div>
+    <div class="product-grid">
+      <article class="product-card" *ngFor="let product of products">
+        <div class="product-art">{{ product.icon }}<span>{{ product.category }}</span></div>
+        <div class="product-body"><label>{{ product.category }}</label><h3>{{ product.name }}</h3><p>{{ product.description }}</p>
+          <div class="product-metrics"><div><small>Customer Satisfaction</small><b><span class="stars">★★★★★</span> {{ product.rating }}</b></div><div class="cred-score"><small>AI Credibility Index</small><b>{{ product.score }}<small>/100</small></b></div></div>
+          <div class="reviewer"><span class="avatar">ER</span><div><b>Verified reviewer</b><small>Community experience, independently analyzed</small></div><span class="rep">Top Reviewer</span></div>
+        </div><div class="product-foot"><span>{{ product.reviews }} verified signals</span><a routerLink="/search">Read analysis →</a></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section architecture-section">
+    <div class="architecture-copy"><label class="kicker">AUTHENTICITY ARCHITECTURE</label><h2>AI Highlights Patterns.<br>Humans Govern the Truth.</h2><p>Credify does not automatically censor or remove reviews based on automated guesswork. Our models detect statistical anomalies, phrasing reuse, and incentivized campaign signatures to assign objective credibility ratings.</p>
+      <ul><li><b>✓ Linguistic Fingerprinting</b><span>Flags synthesized AI reviews and copy-paste farm submissions using natural language markers.</span></li><li><b>✓ Temporal Velocity Checks</b><span>Finds coordinated review bursts and unusual patterns of positive reviews in short windows.</span></li><li><b>✓ Contributor Reputation Weighting</b><span>Long-standing reviewers with proof and community trust have stronger credibility weight.</span></li></ul><a class="text-link" href="#how-it-works">Read our review integrity approach →</a>
+    </div>
+    <div class="scan-card"><div class="scan-top"><span class="live-dot"></span> Real-Time Review Authenticity Scan <small>Audit #CRD-89410</small></div><p class="excerpt">“Using the device for four weeks in dry climate. Noise level runs at 34dB on sleep mode...”</p><div class="progress-line"><span>Factual Specificity & Metrics Present</span><b>96%</b><i><em style="width:96%"></em></i></div><div class="progress-line"><span>Linguistic Organic Sentiment Flow</span><b>92%</b><i><em style="width:92%"></em></i></div><div class="progress-line"><span>Account Age & History Consistency</span><b>89%</b><i><em style="width:89%"></em></i></div><div class="verdict"><span>✓</span><div><small>CUMULATIVE VERDICT</small><b>Verified Authentic (Score: 92)</b></div></div></div>
+  </section>
+
+  <section class="stats"><div><b>42,000+</b><span>Products Analyzed</span></div><div><b>99.4%</b><span>Review Precision</span></div><div><b>128k</b><span>Verified Contributors</span></div><div><b>0%</b><span>Sponsored Bias</span></div></section>
+
+  <section class="cta-wrap"><div class="cta"><div class="cta-icon">⛨</div><h2>Ready to Make Decisions Based on Real<br>Data, Not Paid Hype?</h2><p>Search over 40,000+ AI-inspected products or lend your voice to the<br>community as a verified contributor.</p><div><a class="button button-primary" routerLink="/search">◎ Explore Analyzed Reviews</a><a class="button button-light" routerLink="/register">Become a Verified Contributor</a></div></div></section>
+</main>
+<app-site-footer></app-site-footer>

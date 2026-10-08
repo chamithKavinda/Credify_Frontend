@@ -1,1 +1,24 @@
-<p>site-header works!</p>
+<header class="site-header">
+    <a class="brand" routerLink="/" aria-label="Credify home">
+      <span class="brand-mark">✓</span>
+      <span>Credify</span><i></i>
+    </a>
+  
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="active" routerLink="/">Explore</a>
+      <a href="#how-it-works">How Credify Works</a>
+      <a href="#categories">Categories</a>
+    </nav>
+  
+    <label class="nav-search">
+      <span aria-hidden="true">⌕</span>
+      <input type="search" placeholder="Search reviews & companies..." aria-label="Search reviews and companies">
+      <kbd>⌘K</kbd>
+    </label>
+  
+    <div class="nav-actions">
+      <a class="sign-in" routerLink="/sign-in">Sign In</a>
+      <a class="button button-primary join-button" routerLink="/register">Join Credify</a>
+      <button class="avatar-button" type="button" aria-label="Profile menu">☺</button>
+    </div>
+  </header>

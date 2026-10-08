@@ -1,0 +1,19 @@
+:host { display: block; }
+.site-header { min-height: 66px; padding: 0 4.5%; display: flex; align-items: center; gap: 28px; background: rgba(255,255,255,.94); border-bottom: 1px solid #e7eaf4; position: sticky; top: 0; z-index: 20; }
+.brand { display: flex; align-items: center; gap: 9px; color: #14243b; font-size: 18px; font-weight: 800; text-decoration: none; white-space: nowrap; }
+.brand-mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; color: white; background: #5144ed; font-size: 18px; box-shadow: 0 4px 10px #5144ed35; }
+.brand i { width: 6px; height: 6px; border-radius: 50%; background: #12aa9a; }
+.main-nav { display: flex; align-items: center; gap: 8px; margin-left: 16px; }
+.main-nav a, .sign-in { color: #526078; text-decoration: none; font-size: 13px; font-weight: 650; padding: 10px 14px; border-radius: 9px; white-space: nowrap; }
+.main-nav a:hover, .main-nav a.active { color: #5144ed; background: #edf0ff; }
+.nav-search { margin-left: auto; min-width: 210px; width: min(25vw, 330px); height: 38px; border-radius: 10px; background: #f1f4fc; display: flex; align-items: center; gap: 8px; padding: 0 11px; color: #65718a; }
+.nav-search input { min-width: 0; width: 100%; border: 0; outline: 0; background: transparent; color: #182842; font: inherit; font-size: 12px; }
+.nav-search kbd { font-size: 10px; white-space: nowrap; background: white; border: 1px solid #e5e9f4; border-radius: 5px; padding: 3px 5px; }
+.nav-actions { display: flex; align-items: center; gap: 8px; }
+.button { display: inline-flex; justify-content: center; align-items: center; border: 0; border-radius: 9px; padding: 11px 17px; font-weight: 700; text-decoration: none; cursor: pointer; }
+.button-primary { color: white; background: #5144ed; box-shadow: 0 5px 12px #5144ed2b; }
+.button-primary:hover { background: #4033d8; }
+.join-button { font-size: 12px; white-space: nowrap; }
+.avatar-button { width: 32px; height: 32px; border: 1px solid #e3e8f4; border-radius: 50%; color: #53627c; background: white; font-size: 18px; }
+@media (max-width: 900px) { .site-header { gap: 12px; padding: 0 18px; } .main-nav { margin-left: 0; } .main-nav a { padding: 9px 8px; } .nav-search { width: 180px; } }
+@media (max-width: 680px) { .site-header { flex-wrap: wrap; padding: 12px 16px; } .main-nav { order: 3; width: 100%; justify-content: center; } .nav-search { display: none; } .nav-actions { margin-left: auto; } .sign-in { padding: 8px; } }

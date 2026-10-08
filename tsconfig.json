@@ -13,13 +13,13 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
-    "ignoreDeprecations": "6.0",
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
+    "ignoreDeprecations": "5.0",
     "lib": [
       "ES2022",
       "dom"
