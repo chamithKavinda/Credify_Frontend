@@ -1,1 +1,20 @@
-<p>register works!</p>
+<div class="auth-page"><app-site-header></app-site-header><main class="auth-backdrop">
+    <a class="auth-close" routerLink="/" aria-label="Close registration">×</a>
+    <section class="auth-card register-card">
+      <div class="auth-brand"><span class="brand-mark">✓</span><div><b>Credify</b><small>Truth & Authenticity Network</small></div></div>
+      <h1>Join the Trust Network</h1><p class="auth-intro">Publish verified evaluations, earn credibility badges, and counter review fraud.</p>
+      <div class="auth-tabs"><a routerLink="/sign-in">Sign In</a><a class="selected" routerLink="/register">Create Account</a></div>
+      <form (ngSubmit)="register()">
+        <div class="form-row"><label>Full Name<input name="fullName" [(ngModel)]="fullName" placeholder="Your name" required></label><label>Contributor Handle<input name="handle" [(ngModel)]="handle" placeholder="your.handle" required></label></div>
+        <label>Work or Personal Email<input name="email" type="email" [(ngModel)]="email" placeholder="you@example.com" required></label>
+        <label>Master Password<input name="password" type="password" [(ngModel)]="password" placeholder="At least 8 characters" required minlength="8"></label>
+        <div class="password-strength"><i></i><i></i><i></i><i></i><small>Use 8+ characters, including letters and numbers</small></div>
+        <label>Primary Review Specialty<select name="specialty" [(ngModel)]="specialty"><option>Consumer Tech</option><option>Audio & Acoustics</option><option>Enterprise SaaS</option><option>Smart Hardware</option></select></label>
+        <label class="check agreement"><input type="checkbox" name="accepted" [(ngModel)]="accepted"> I agree to the <a href="#charter">Contributor Integrity Charter</a> and community rules.</label>
+        <p class="form-error" *ngIf="error">{{ error }}</p><button class="button button-primary auth-submit" type="submit">Create Contributor Account →</button>
+      </form>
+      <div class="or-line"><span>OR CONTINUE WITH SECURE PROVIDER</span></div><button type="button" class="provider-button">🌐 Continue with Google</button>
+      <div class="security-note">🔒 Your identity details are protected and are not shown on public review scores.</div>
+      <p class="switch-auth">Already have an account? <a routerLink="/sign-in">Sign In</a></p>
+    </section>
+  </main><app-site-footer></app-site-footer></div>
