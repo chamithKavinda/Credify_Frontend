@@ -27,6 +27,15 @@ import { RatingStarsComponent } from './shared/components/rating-stars/rating-st
 import { CredibilityBadgeComponent } from './shared/components/credibility-badge/credibility-badge.component';
 import { StatCardComponent } from './shared/components/stat-card/stat-card.component';
 import { AppRoutingModule } from './app-routing.module';
+import { FormsModule } from '@angular/forms';
+import { UserSettingsComponent } from './features/user/settings/settings.component';
+import { ReviewManagementComponent } from './features/admin/review-management/review-management.component';
+import { ReportsComponent } from './features/admin/reports/reports.component';
+import { UserManagementComponent } from './features/admin/user-management/user-management.component';
+import { PlatformSettingsComponent } from './features/admin/platform-settings/platform-settings.component';
+import { ProductCardComponent } from './shared/components/product-card/product-card.component';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { apiInterceptor } from './core/http/api.interceptor';
 
 @NgModule({
   declarations: [
@@ -54,13 +63,20 @@ import { AppRoutingModule } from './app-routing.module';
     ReviewCardComponent,
     RatingStarsComponent,
     CredibilityBadgeComponent,
-    StatCardComponent
+    StatCardComponent,
+    UserSettingsComponent,
+    ReviewManagementComponent,
+    ReportsComponent,
+    UserManagementComponent,
+    PlatformSettingsComponent,
+    ProductCardComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [provideHttpClient(withInterceptors([apiInterceptor]))],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
