@@ -1,1 +1,25 @@
-<p>sign-in works!</p>
+<div class="auth-page">
+    <app-site-header></app-site-header>
+    <main class="auth-backdrop">
+      <a class="auth-close" routerLink="/" aria-label="Close sign in">×</a>
+      <section class="auth-card">
+        <div class="auth-brand"><span class="brand-mark">✓</span><div><b>Credify</b><small>Truth & Authenticity Network</small></div></div>
+        <h1>Welcome back</h1>
+        <p class="auth-intro">Access your contributor vault, reputation score, and verified reviews.</p>
+        <div class="auth-tabs"><a class="selected" routerLink="/sign-in">Sign In</a><a routerLink="/register">Create Account</a></div>
+        <form (ngSubmit)="signIn()">
+          <label>Email or Contributor Handle<input name="email" type="email" [(ngModel)]="email" placeholder="you@example.com" required></label>
+          <label>Password<input name="password" type="password" [(ngModel)]="password" placeholder="Enter your password" required></label>
+          <div class="auth-options"><label class="check"><input type="checkbox" name="remember" [(ngModel)]="remember"> Remember this device</label><a href="#forgot">Forgot password?</a></div>
+          <p class="form-error" *ngIf="error">{{ error }}</p>
+          <button class="button button-primary auth-submit" type="submit" [disabled]="loading">
+            {{ loading ? 'Signing in…' : 'Sign In to Credify →' }}
+          </button>
+        </form>
+        <div class="or-line"><span>OR CONTINUE WITH SECURE PROVIDER</span></div>
+        <button type="button" class="provider-button" (click)="error='Google sign-in will be connected later.'">🌐 Continue with Google</button>
+        <div class="security-note">🔒 Your credentials are protected and are never displayed on public reviews.</div>
+      </section>
+    </main>
+    <app-site-footer></app-site-footer>
+  </div>
