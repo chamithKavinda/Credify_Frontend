@@ -1,0 +1,1 @@
+:host{display:inline-block}.rating-stars{display:inline-flex;align-items:center;gap:2px;white-space:nowrap}.rating-stars button{padding:0;border:0;background:none;color:#cbd3e2;font-size:16px;line-height:1;cursor:pointer}.rating-stars button.filled{color:#f2a400}.rating-stars button:disabled{cursor:default}.rating-stars small{margin-left:5px;color:#52617a;font-size:9px}

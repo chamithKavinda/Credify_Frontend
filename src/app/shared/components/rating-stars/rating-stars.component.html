@@ -1,1 +1,4 @@
-<p>rating-stars works!</p>
+<span class="rating-stars" [attr.aria-label]="rating + ' out of ' + max + ' stars'">
+    <button *ngFor="let star of stars" type="button" [class.filled]="star <= rating" [disabled]="readOnly" (click)="setRating(star)" [attr.aria-label]="star + ' stars'">★</button>
+    <small>{{ rating | number:'1.1-1' }}</small>
+  </span>
