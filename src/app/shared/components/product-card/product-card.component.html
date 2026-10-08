@@ -1,0 +1,9 @@
+<article class="product-card">
+    <a class="product-art" [routerLink]="['/products', product.id]" [attr.aria-label]="'View ' + product.name">
+      <span class="product-icon">{{ product.icon || '✦' }}</span><small>{{ product.category }}</small>
+    </a>
+    <div class="product-body"><span class="category-label">{{ product.category }}</span><h3><a [routerLink]="['/products', product.id]">{{ product.name }}</a></h3><p>{{ product.description }}</p>
+      <div class="product-scores"><div><small>Customer satisfaction</small><app-rating-stars [rating]="product.rating"></app-rating-stars></div><app-credibility-badge [score]="product.credibilityScore" [showLabel]="false"></app-credibility-badge></div>
+      <small class="review-count">{{ product.reviewCount }} reviews analyzed</small>
+    </div>
+  </article>
