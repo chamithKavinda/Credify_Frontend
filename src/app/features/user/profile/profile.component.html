@@ -1,1 +1,58 @@
-<p>profile works!</p>
+<section class="portal-header">
+  <div>
+    <h1>Account Profile</h1>
+    <p>Manage your account personal details, reputation status, and credentials.</p>
+  </div>
+</section>
+
+<div class="portal-card" *ngIf="!loading">
+  <form (ngSubmit)="saveProfile()">
+    <div class="form-group">
+      <label>Email Address (Cannot be changed)</label>
+      <input type="email" [value]="email" disabled readonly>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name *</label>
+        <input type="text" [(ngModel)]="firstName" name="firstName" required>
+      </div>
+      <div class="form-group">
+        <label>Last Name *</label>
+        <input type="text" [(ngModel)]="lastName" name="lastName" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Role</label>
+        <input type="text" [value]="role" disabled readonly>
+      </div>
+      <div class="form-group">
+        <label>Reputation Score</label>
+        <input type="text" [value]="reputationScore + ' / 100'" disabled readonly>
+      </div>
+    </div>
+
+    <p class="form-success" *ngIf="successMsg">{{ successMsg }}</p>
+    <p class="form-error" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+    <button type="submit" class="button button-primary" [disabled]="saving">
+      {{ saving ? 'Saving...' : 'Update Profile' }}
+    </button>
+  </form>
+</div>
+
+<div class="portal-card" *ngIf="!loading && badges.length > 0">
+  <h2>Your Earned Badges</h2>
+  <div class="badge-list">
+    <div class="badge-item" *ngFor="let b of badges">
+      <div class="badge-icon">🎖️</div>
+      <div>
+        <b>{{ b.name }}</b>
+        <p>{{ b.description }}</p>
+        <small>Awarded {{ b.awardedAt | date:'mediumDate' }}</small>
+      </div>
+    </div>
+  </div>
+</div>

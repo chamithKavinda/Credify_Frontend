@@ -12,35 +12,60 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  get currentUser(): User | null { return this.currentUserSubject.value; }
-  isAuthenticated(): boolean { return !!localStorage.getItem('credifyToken'); }
-  isAdmin(): boolean { return this.currentUser?.role === 'ADMIN'; }
+  get currentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('credifyToken');
+  }
+
+  isAdmin(): boolean {
+    return this.currentUser?.role === 'ADMIN';
+  }
+
+  getUserFullName(user?: User | null): string {
+    const u = user || this.currentUser;
+    if (!u) return 'Guest';
+    return `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email;
+  }
 
   login(request: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.baseUrl}/login`, request).pipe(tap(response => this.saveSession(response)));
+    return this.http.post<AuthResponse>(`${this.baseUrl}/login`, request).pipe(
+      tap(response => this.saveSession(response))
+    );
   }
 
   register(request: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.baseUrl}/register`, request).pipe(tap(response => this.saveSession(response)));
+    return this.http.post<AuthResponse>(`${this.baseUrl}/register`, request).pipe(
+      tap(response => this.saveSession(response))
+    );
   }
 
   logout(): void {
     localStorage.removeItem('credifyToken');
     localStorage.removeItem('credifyUser');
-    localStorage.removeItem('credifyDemoUser');
     this.currentUserSubject.next(null);
   }
 
   private saveSession(response: AuthResponse): void {
-    localStorage.setItem('credifyToken', response.accessToken);
-    localStorage.setItem('credifyUser', JSON.stringify(response.user));
-    this.currentUserSubject.next(response.user);
+    if (response && response.token) {
+      localStorage.setItem('credifyToken', response.token);
+    }
+    if (response && response.user) {
+      localStorage.setItem('credifyUser', JSON.stringify(response.user));
+      this.currentUserSubject.next(response.user);
+    }
   }
 
   private loadUser(): User | null {
     const value = localStorage.getItem('credifyUser');
     if (!value) return null;
-    try { return JSON.parse(value) as User; }
-    catch { localStorage.removeItem('credifyUser'); return null; }
+    try {
+      return JSON.parse(value) as User;
+    } catch {
+      localStorage.removeItem('credifyUser');
+      return null;
+    }
   }
 }

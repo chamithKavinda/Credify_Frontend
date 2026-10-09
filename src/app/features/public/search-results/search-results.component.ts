@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
-interface SearchProduct { id: string; category: string; name: string; description: string; rating: number; score: number; reviews: string; icon: string; status: 'trusted' | 'risk'; }
+import { ReviewService } from '../../../core/services/review.service';
+import { Review } from '../../../shared/models/review.model';
 
 @Component({
   selector: 'app-search-results',
@@ -11,20 +11,72 @@ interface SearchProduct { id: string; category: string; name: string; descriptio
 })
 export class SearchResultsComponent implements OnInit {
   query = '';
-  minScore = 0;
   category = 'All categories';
-  products: SearchProduct[] = [
-    { id: 'sony-wh-1000xm5', category: 'Consumer Electronics', name: 'Sony WH-1000XM5 Wireless Headphones', description: 'Verified purchase signals, deep product testing notes and authentic community feedback.', rating: 4.8, score: 94, reviews: '1,420', icon: '🎧', status: 'trusted' },
-    { id: 'bose-qc-ultra', category: 'Consumer Electronics', name: 'Bose QuietComfort Ultra Headphones', description: 'Long-term owner reviews with purchase proof and organic sentiment distribution.', rating: 4.5, score: 91, reviews: '890', icon: '🎧', status: 'trusted' },
-    { id: 'swiftcharge-65w', category: 'Consumer Electronics', name: 'SwiftCharge GaN Pro 65W Adapter', description: 'Unusual review burst detected. Several reviews are awaiting moderator review.', rating: 4.9, score: 38, reviews: '142', icon: '🔌', status: 'risk' },
-    { id: 'pulseflow', category: 'Productivity Software', name: 'PulseFlow Suite', description: 'Workspace feedback and verified subscriptions analyzed by Credify.', rating: 4.1, score: 98, reviews: '342', icon: '▣', status: 'trusted' }
+  minRating = 0;
+  sort = 'newest';
+  loading = false;
+  reviews: Review[] = [];
+
+  categories = [
+    'Audio & Wearables',
+    'Computing & Laptops',
+    'Mice & Keyboards',
+    'Speakers & Acoustics',
+    'Smartphones & Mobiles',
+    'Digital Displays & TVs',
+    'Cameras & Digital Gear',
+    'Power & Chargers'
   ];
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
-  ngOnInit(): void { this.route.queryParamMap.subscribe(params => this.query = params.get('q') || ''); }
-  get filteredProducts(): SearchProduct[] {
-    const term = this.query.toLowerCase();
-    return this.products.filter(p => (this.category === 'All categories' || p.category === this.category) && p.score >= this.minScore && (!term || `${p.name} ${p.category} ${p.description}`.toLowerCase().includes(term)));
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private reviewService: ReviewService
+  ) {}
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe(params => {
+      this.query = params.get('q') || '';
+      if (params.get('category')) {
+        this.category = params.get('category') || 'All categories';
+      }
+      this.fetchReviews();
+    });
   }
-  clearFilters(): void { this.query = ''; this.category = 'All categories'; this.minScore = 0; this.router.navigate(['/search']); }
+
+  fetchReviews(): void {
+    this.loading = true;
+    this.reviewService.listReviews({
+      q: this.query,
+      category: this.category === 'All categories' ? undefined : this.category,
+      minRating: this.minRating > 0 ? this.minRating : undefined,
+      sort: this.sort
+    }).subscribe({
+      next: (data) => {
+        this.reviews = data;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    });
+  }
+
+  onSortChange(newSort: string): void {
+    this.sort = newSort;
+    this.fetchReviews();
+  }
+
+  onCategoryChange(): void {
+    this.fetchReviews();
+  }
+
+  clearFilters(): void {
+    this.query = '';
+    this.category = 'All categories';
+    this.minRating = 0;
+    this.sort = 'newest';
+    this.router.navigate(['/search']);
+    this.fetchReviews();
+  }
 }

@@ -1,18 +1,67 @@
-import { Component } from '@angular/core';
-interface ManagedUser { name: string; email: string; role: string; reputation: number; reviews: number; status: string; }
-@Component({ selector: 'app-user-management', standalone: false, templateUrl: './user-management.component.html', styleUrls: ['./user-management.component.css'] })
-export class UserManagementComponent {
-  query = '';
-  statusFilter = 'All';
-  users: ManagedUser[] = [
-    { name: 'Elena Rostova', email: 'elena@example.com', role: 'Contributor', reputation: 92, reviews: 64, status: 'Active' },
-    { name: 'Marcus Chen', email: 'marcus@example.com', role: 'Contributor', reputation: 88, reviews: 42, status: 'Active' },
-    { name: 'User_88291', email: 'user88291@example.com', role: 'Standard', reputation: 34, reviews: 14, status: 'Probation' },
-    { name: 'TechReviewer99', email: 'tech99@example.com', role: 'Restricted', reputation: 21, reviews: 31, status: 'Suspended' }
-  ];
-  get filteredUsers(): ManagedUser[] {
-    const q = this.query.toLowerCase();
-    return this.users.filter(u => (this.statusFilter === 'All' || u.status === this.statusFilter) && (!q || `${u.name} ${u.email}`.toLowerCase().includes(q)));
+import { Component, OnInit } from '@angular/core';
+import { AdminService } from '../../../core/services/admin.service';
+import { User } from '../../../shared/models/auth.model';
+import { SystemBadge } from '../../../shared/models/dashboard.model';
+
+@Component({
+  selector: 'app-user-management',
+  standalone: false,
+  templateUrl: './user-management.component.html',
+  styleUrls: ['./user-management.component.css']
+})
+export class UserManagementComponent implements OnInit {
+  users: User[] = [];
+  badges: SystemBadge[] = [];
+  loading = true;
+  message = '';
+  selectedBadgeId = '';
+
+  constructor(private adminService: AdminService) {}
+
+  ngOnInit(): void {
+    this.loadUsers();
+    this.adminService.getBadges().subscribe({
+      next: (data) => {
+        this.badges = data;
+        if (data.length > 0) this.selectedBadgeId = data[0].id;
+      }
+    });
   }
-  toggleStatus(user: ManagedUser): void { user.status = user.status === 'Suspended' ? 'Active' : 'Suspended'; }
+
+  loadUsers(): void {
+    this.loading = true;
+    this.adminService.getUsers().subscribe({
+      next: (data) => {
+        this.users = data;
+        this.loading = false;
+      },
+      error: () => { this.loading = false; }
+    });
+  }
+
+  toggleStatus(user: User): void {
+    const newStatus = user.accountStatus === 'SUSPENDED' ? 'ACTIVE' : 'SUSPENDED';
+    this.message = '';
+    this.adminService.updateUserStatus(user.id, newStatus).subscribe({
+      next: () => {
+        user.accountStatus = newStatus;
+        this.message = `Updated ${user.firstName} ${user.lastName} status to ${newStatus}.`;
+      },
+      error: (err) => {
+        alert(err?.error?.message || 'Failed to update user status.');
+      }
+    });
+  }
+
+  awardBadge(userId: string): void {
+    if (!this.selectedBadgeId) return;
+    this.adminService.awardBadge(userId, this.selectedBadgeId).subscribe({
+      next: () => {
+        this.message = `Badge awarded successfully to user!`;
+      },
+      error: (err) => {
+        alert(err?.error?.message || 'Failed to award badge.');
+      }
+    });
+  }
 }

@@ -1,10 +1,87 @@
-<app-site-header></app-site-header><main class="results-page">
-    <div class="results-heading"><div><span class="kicker">⛨ ALGORITHMIC TRUST ENGINE / LIVE INDEX · HEURISTICS V4.2 ACTIVE</span><h1>{{ query ? 'Results for “' + query + '”' : 'Noise Canceling Headphones' }}</h1><p>Showing {{ filteredProducts.length }} products with verified purchase signals and authenticity analysis.</p></div><label class="sort-control">Sort strategy<select><option>Highest Credibility Score (AI)</option><option>Highest Rating</option><option>Most Reviewed</option></select></label></div>
-    <div class="active-filters"><b>ACTIVE SCOPES:</b><span>{{ category }}</span><span *ngIf="minScore">Minimum credibility: {{ minScore }}+</span><button (click)="clearFilters()">Reset filters</button></div>
-    <div class="results-layout"><aside class="filter-panel"><div class="filter-title"><h2>☷ Filters</h2><button (click)="clearFilters()">Clear All</button></div><label>Category<select [(ngModel)]="category"><option>All categories</option><option>Consumer Electronics</option><option>Productivity Software</option></select></label><fieldset><legend>Credibility Index</legend><label><input type="radio" name="score" [value]="0" [(ngModel)]="minScore"> All scores</label><label><input type="radio" name="score" [value]="85" [(ngModel)]="minScore"> High Credibility (85–100)</label><label><input type="radio" name="score" [value]="60" [(ngModel)]="minScore"> Moderate (60–84)</label></fieldset><fieldset><legend>User Satisfaction</legend><label><input type="checkbox"> ★★★★★ 5.0 star</label><label><input type="checkbox"> ★★★★☆ 4.0 & up</label><label><input type="checkbox"> Purchase verified only</label></fieldset><div class="filter-note"><b>⌘ Heuristic Scrubbing</b><p>Credify flags review bursts and duplicated content for human review.</p></div></aside>
-      <section class="results-list"><article class="result-card" *ngFor="let p of filteredProducts" [class.risk-card]="p.status==='risk'"><div class="product-thumb">{{ p.icon }}</div><div class="result-main"><span class="kicker">▤ {{ p.reviews }} VERIFIED PURCHASE SIGNALS</span><h2>{{ p.name }}</h2><p class="meta">{{ p.category }} · {{ p.reviews }} reviews evaluated</p><div class="rating-line"><span class="stars">★★★★★</span> {{ p.rating }} <span class="dot">•</span><span>{{ p.status==='risk' ? 'Review pattern under moderation' : 'Organic sentiment detected' }}</span></div><p class="description">{{ p.description }}</p><a class="button button-primary" [routerLink]="['/products', p.id]">View Reviews & Authenticity Breakdown →</a></div><div class="score-pill" [class.low-score]="p.score<60">⛨ {{ p.score }}<small>/100<br>Credibility</small></div></article>
-        <p class="empty-state" *ngIf="filteredProducts.length===0">No products match these filters. Try clearing the filters.</p>
-      </section>
+<app-site-header></app-site-header>
+<main class="results-page">
+  <div class="results-heading">
+    <div>
+      <span class="kicker">⛨ ALGORITHMIC TRUST ENGINE / LIVE REVIEWS INDEX</span>
+      <h1>{{ query ? 'Results for “' + query + '”' : 'All Verified Consumer Reviews' }}</h1>
+      <p>Showing {{ reviews.length }} reviews with verified signals and credibility scoring.</p>
     </div>
-    <section class="request-audit"><div><h2>Can’t find what you are looking for?</h2><p>Request an authenticity audit for an unindexed product or service.</p></div><button class="button button-primary" type="button">Request an Authenticity Audit</button></section>
-  </main><app-site-footer></app-site-footer>
+    <label class="sort-control">
+      Sort strategy
+      <select [ngModel]="sort" (ngModelChange)="onSortChange($event)">
+        <option value="newest">Newest First</option>
+        <option value="credibility">Highest Credibility Score (AI)</option>
+        <option value="rating">Highest User Rating</option>
+        <option value="helpful">Most Helpful Votes</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="active-filters">
+    <b>ACTIVE SCOPES:</b>
+    <span>Category: {{ category }}</span>
+    <span *ngIf="query">Search: "{{ query }}"</span>
+    <span *ngIf="minRating > 0">Min Rating: {{ minRating }}+ ★</span>
+    <button (click)="clearFilters()">Reset filters</button>
+  </div>
+
+  <div class="results-layout">
+    <aside class="filter-panel">
+      <div class="filter-title">
+        <h2>☷ Filters</h2>
+        <button (click)="clearFilters()">Clear All</button>
+      </div>
+
+      <label>
+        Category
+        <select [(ngModel)]="category" (change)="onCategoryChange()">
+          <option>All categories</option>
+          <option *ngFor="let cat of categories">{{ cat }}</option>
+        </select>
+      </label>
+
+      <fieldset>
+        <legend>User Satisfaction Rating</legend>
+        <label><input type="radio" name="minRating" [value]="0" [(ngModel)]="minRating" (change)="fetchReviews()"> All Ratings</label>
+        <label><input type="radio" name="minRating" [value]="4" [(ngModel)]="minRating" (change)="fetchReviews()"> 4 Stars & Up (★★★★☆)</label>
+        <label><input type="radio" name="minRating" [value]="5" [(ngModel)]="minRating" (change)="fetchReviews()"> 5 Stars Only (★★★★★)</label>
+      </fieldset>
+
+      <div class="filter-note">
+        <b>⌘ AI Authenticity Engine</b>
+        <p>Credify scans reviews for sentiment depth, repetitive syntax, and automated spam patterns.</p>
+      </div>
+    </aside>
+
+    <section class="results-list">
+      <div *ngIf="loading" class="empty-state">Loading published reviews from database...</div>
+
+      <article class="result-card" *ngFor="let r of reviews">
+        <div class="product-thumb">⭐</div>
+        <div class="result-main">
+          <span class="kicker">CATEGORY: {{ r.category }} · BY {{ r.author }}</span>
+          <h2>{{ r.headline }}</h2>
+          <p class="meta">Product: <b>{{ r.productName }}</b> · Posted {{ r.createdAt | date:'mediumDate' }}</p>
+          <div class="rating-line">
+            <span class="stars">★ {{ r.ratingValue }} / 5</span>
+            <span class="dot">•</span>
+            <span>Sentiment: {{ r.sentiment || 'ANALYZED' }}</span>
+            <span class="dot">•</span>
+            <span>👍 {{ r.helpfulVoteCount }} Helpful Votes</span>
+          </div>
+          <p class="description">{{ r.reviewText }}</p>
+          <a class="button button-primary" [routerLink]="['/reviews', r.id]">View Complete Review & Discussion →</a>
+        </div>
+        <div class="score-pill" [class.low-score]="r.credibilityScore < 60">
+          ⛨ {{ r.credibilityScore }}<small>/100<br>Credibility</small>
+        </div>
+      </article>
+
+      <div class="empty-state" *ngIf="!loading && reviews.length === 0">
+        <p>No published reviews match your search criteria.</p>
+        <button class="button button-primary" (click)="clearFilters()">Clear Filters</button>
+      </div>
+    </section>
+  </div>
+</main>
+<app-site-footer></app-site-footer>

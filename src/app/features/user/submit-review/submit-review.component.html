@@ -1,1 +1,50 @@
-<p>submit-review works!</p>
+<section class="portal-header">
+  <div>
+    <h1>Submit a Product Review</h1>
+    <p>Share your honest experience. Reviews undergo automated AI authenticity checks and scoring.</p>
+  </div>
+</section>
+
+<div class="portal-card">
+  <form (ngSubmit)="submit()">
+    <div class="form-group">
+      <label>Product / Service Name *</label>
+      <input type="text" [(ngModel)]="productName" name="productName" placeholder="e.g. Sony WH-1000XM5 Headphones" required>
+    </div>
+
+    <div class="form-group">
+      <label>Category</label>
+      <select [(ngModel)]="category" name="category">
+        <option *ngFor="let cat of categories">{{ cat }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Review Headline / Title *</label>
+      <input type="text" [(ngModel)]="headline" name="headline" placeholder="e.g. Exceptional noise cancellation with solid battery life" required>
+    </div>
+
+    <div class="form-group">
+      <label>Satisfaction Rating (1 to 5 Stars) *</label>
+      <select [(ngModel)]="ratingValue" name="ratingValue">
+        <option [ngValue]="5">★★★★★ (5 Stars - Excellent)</option>
+        <option [ngValue]="4">★★★★☆ (4 Stars - Good)</option>
+        <option [ngValue]="3">★★★☆☆ (3 Stars - Average)</option>
+        <option [ngValue]="2">★★☆☆☆ (2 Stars - Below Average)</option>
+        <option [ngValue]="1">★☆☆☆☆ (1 Star - Poor)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Detailed Evaluation & Experience *</label>
+      <textarea [(ngModel)]="reviewText" name="reviewText" rows="6" placeholder="Describe your actual experience, pros, cons, usage duration, and key observations..." required></textarea>
+      <small>Minimum 10 characters. Detailed, objective reviews earn higher credibility scores.</small>
+    </div>
+
+    <p class="form-error" *ngIf="error">{{ error }}</p>
+
+    <button type="submit" class="button button-primary" [disabled]="loading">
+      {{ loading ? 'Analyzing & Publishing...' : 'Submit Evaluation →' }}
+    </button>
+  </form>
+</div>

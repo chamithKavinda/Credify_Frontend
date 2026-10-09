@@ -1,32 +1,47 @@
-export type ReviewStatus = 'PENDING' | 'ANALYZING' | 'PUBLISHED' | 'CHANGES_REQUESTED' | 'REMOVED';
+export type ReviewStatus = 'PENDING' | 'PUBLISHED' | 'HIDDEN' | 'REMOVED';
+export type AuthenticityStatus = 'PENDING' | 'VERIFIED' | 'NEEDS_REVIEW' | 'FLAGGED';
 
 export interface Review {
   id: string;
-  productId: string;
+  userId: string;
+  author: string;
   productName: string;
-  reviewerId: string;
-  reviewerName: string;
-  title: string;
-  body: string;
-  rating: number;
+  category: string;
+  headline: string;
+  ratingValue: number;
+  reviewText: string;
+  authenticityStatus: AuthenticityStatus;
+  authenticityScore: number;
   credibilityScore: number;
+  sentiment: string;
+  helpfulVoteCount: number;
   status: ReviewStatus;
   createdAt: string;
-  helpfulCount: number;
-  purchaseVerified: boolean;
+  updatedAt: string;
 }
 
 export interface CreateReviewRequest {
-  productId: string;
-  title: string;
-  body: string;
-  rating: number;
-  usageDuration: string;
-  purchaseProofUrl?: string;
+  productName: string;
+  category?: string;
+  headline: string;
+  ratingValue: number;
+  reviewText: string;
 }
 
-export interface ModerationDecision {
-  decision: 'APPROVE' | 'REMOVE' | 'REQUEST_CHANGES';
+export interface Comment {
+  id: string;
+  reviewId: string;
+  userId: string;
+  commentText: string;
+  createdAt: string;
+}
+
+export interface Report {
+  id: string;
+  reviewId: string;
+  reporterUserId: string;
   reason: string;
-  notes?: string;
+  status: 'OPEN' | 'REVIEWED' | 'DISMISSED';
+  createdAt: string;
+  updatedAt: string;
 }

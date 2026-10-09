@@ -1,8 +1,124 @@
-<app-site-header></app-site-header><main class="product-page">
-    <p class="breadcrumbs"><a routerLink="/">Home</a> › Consumer Electronics › Audio Hardware › {{ productName }}</p>
-    <section class="product-summary"><div class="hero-product"><span>✓ Hardware Audited</span><div>🎧</div><small>18 verified product photos</small></div><div class="product-overview"><span class="kicker">VERIFIED TELEMETRY PROFILE</span><h1>{{ productName }}</h1><p>Active noise cancelling over-ear headphones with integrated processor and adaptive sound control.</p><div class="overview-cards"><article><small>CONSUMER SATISFACTION</small><b>4.8 <small>/ 5.0</small></b><span class="stars">★★★★★</span><p>1,420 total reviews analyzed</p></article><article class="green-card"><small>⛨ CREDIFY AUTHENTICITY INDEX</small><b>94 <small>/ 100</small></b><span>High credibility · Organic distribution detected</span></article></div><div class="rating-bars"><span>5 ★ <i><em style="width:78%"></em></i>78%</span><span>4 ★ <i><em style="width:14%"></em></i>14%</span><span>3 ★ <i><em style="width:5%"></em></i>5%</span><span>2 ★ <i><em style="width:2%"></em></i>2%</span><span>1 ★ <i><em style="width:1%"></em></i>1%</span></div><div class="product-actions"><a class="button button-primary" routerLink="/user/reviews/new">✎ Write an Authenticated Review</a><button class="button button-light">♧ Follow Product Alerts</button></div></div></section>
-    <div class="review-toolbar"><input placeholder="⌕ Filter reviews by keyword"><button class="selected">All (1,420)</button><button>Verified Purchase</button><button>With Audio Telemetry</button><select><option>Highest Credibility Score</option><option>Most Recent</option></select></div>
-    <div class="review-layout"><section class="review-list"><article class="review-card" *ngFor="let r of reviews"><div class="reviewer-line"><span class="avatar">{{ r.name.slice(0,1) }}</span><div><b>{{ r.name }} <small>{{ r.role }}</small></b><span>● {{ r.score }}/100 reputation · {{ r.date }} · Receipt verified</span></div><span class="stars">★★★★★ <b>{{ r.rating }}.0</b></span></div><h2>{{ r.title }}</h2><p>{{ r.text }}</p><div class="review-tags"><span>✓ Verified strengths</span><span>Balanced trade-offs present</span></div><div class="review-bottom"><button>👍 Helpful ({{ r.helpful }})</button><button>▢ Comments</button><button>⚑ Report anomaly</button></div></article></section>
-      <aside class="trust-sidebar"><article><h3>⚖ Credify Truth Engine</h3><p>How our metrics differ from standard reviews.</p><div><b>★ Star Rating = Pure Sentiment</b><small>Measures whether verified owners enjoy the product.</small></div><div><b>⛨ Credibility Score = Data Authenticity</b><small>Measures whether the review appears genuine and independent.</small></div><a href="#">Read the Integrity Whitepaper →</a></article><article class="join-panel"><h3>Influence consumer truth.</h3><p>Join Credify to rate helpfulness, post purchase proofs, and build your Contributor Reputation.</p><a class="button button-light" routerLink="/register">Join Credify</a><a routerLink="/sign-in">Sign in to your account</a></article></aside>
+<app-site-header></app-site-header>
+
+<main class="review-page" *ngIf="!loading && review">
+  <div class="product-banner">
+    <div>
+      <span class="kicker">PRODUCT EVALUATION & AUTHENTICITY ANALYSIS</span>
+      <h1>{{ review.headline }}</h1>
+      <p class="product-meta">
+        Product: <b>{{ review.productName }}</b> · Category: <b>{{ review.category }}</b> · Author: <b>{{ review.author }}</b>
+      </p>
     </div>
-  </main><app-site-footer></app-site-footer>
+    <div class="banner-score">
+      <b>⛨ {{ review.credibilityScore }} / 100</b>
+      <span>AI Credibility Score</span>
+    </div>
+  </div>
+
+  <div class="review-grid">
+    <article class="review-main">
+      <div class="review-card-header">
+        <div class="author-info">
+          <div class="avatar">{{ review.author.substring(0, 2).toUpperCase() }}</div>
+          <div>
+            <h3>{{ review.author }}</h3>
+            <small>Submitted {{ review.createdAt | date:'medium' }}</small>
+          </div>
+        </div>
+        <div class="rating-box">
+          <span class="stars">★ {{ review.ratingValue }} / 5</span>
+        </div>
+      </div>
+
+      <div class="review-body">
+        <p>{{ review.reviewText }}</p>
+      </div>
+
+      <div class="review-actions">
+        <button class="button button-primary" (click)="markHelpful()">
+          👍 Helpful ({{ review.helpfulVoteCount }})
+        </button>
+        <button class="button button-light" (click)="showReportModal = true">
+          🚩 Report Suspicious Review
+        </button>
+      </div>
+
+      <!-- Comments Section -->
+      <section class="comments-section">
+        <h2>Community Comments ({{ comments.length }})</h2>
+
+        <div class="comment-list" *ngIf="comments.length > 0">
+          <div class="comment-card" *ngFor="let c of comments">
+            <div class="comment-meta">
+              <b>Member</b> <small>• {{ c.createdAt | date:'short' }}</small>
+            </div>
+            <p>{{ c.commentText }}</p>
+          </div>
+        </div>
+
+        <div class="no-comments" *ngIf="comments.length === 0">
+          <p>No comments yet. Be the first to share your thoughts!</p>
+        </div>
+
+        <div class="add-comment" *ngIf="auth.isAuthenticated()">
+          <textarea [(ngModel)]="newCommentText" placeholder="Add your constructive comment or observation..." rows="3"></textarea>
+          <p class="form-error" *ngIf="commentError">{{ commentError }}</p>
+          <button class="button button-primary" (click)="submitComment()" [disabled]="submittingComment">
+            {{ submittingComment ? 'Posting...' : 'Post Comment' }}
+          </button>
+        </div>
+        <div class="signin-prompt" *ngIf="!auth.isAuthenticated()">
+          <p><a routerLink="/sign-in">Sign in</a> to leave a comment on this review.</p>
+        </div>
+      </section>
+    </article>
+
+    <!-- Sidebar AI Metrics -->
+    <aside class="ai-breakdown">
+      <div class="panel-card">
+        <h3>⛨ Authenticity Breakdown</h3>
+        <div class="metric-row">
+          <span>Authenticity Status:</span>
+          <b class="badge-status">{{ review.authenticityStatus }}</b>
+        </div>
+        <div class="metric-row">
+          <span>AI Credibility Score:</span>
+          <b>{{ review.credibilityScore }} / 100</b>
+        </div>
+        <div class="metric-row">
+          <span>Sentiment Detection:</span>
+          <b>{{ review.sentiment }}</b>
+        </div>
+        <div class="metric-row">
+          <span>Review Status:</span>
+          <b>{{ review.status }}</b>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Report Modal -->
+  <div class="modal-backdrop" *ngIf="showReportModal">
+    <div class="modal-card">
+      <h2>Report Review for Moderation</h2>
+      <p>Please describe why you believe this review is fake, promotional spam, or inappropriate:</p>
+      <textarea [(ngModel)]="reportReason" rows="4" placeholder="Enter reason for report..."></textarea>
+      <p *ngIf="reportSuccess" class="form-success">Report submitted successfully to moderators.</p>
+      <div class="modal-actions">
+        <button class="button button-primary" (click)="submitReport()" [disabled]="reporting">Submit Report</button>
+        <button class="button button-light" (click)="showReportModal = false">Cancel</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="empty-state" *ngIf="loading">
+  <p>Loading evaluation details...</p>
+</div>
+
+<div class="empty-state" *ngIf="!loading && !review">
+  <p>{{ error || 'Review not found.' }}</p>
+  <a routerLink="/search" class="button button-primary">Back to Search</a>
+</div>
+
+<app-site-footer></app-site-footer>

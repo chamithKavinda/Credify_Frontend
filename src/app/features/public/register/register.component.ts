@@ -3,15 +3,16 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
-  selector: 'app-register', standalone: false,
-  templateUrl: './register.component.html', styleUrls: ['./register.component.css']
+  selector: 'app-register',
+  standalone: false,
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  fullName = '';
-  handle = '';
+  firstName = '';
+  lastName = '';
   email = '';
   password = '';
-  specialty = 'Consumer Tech';
   accepted = false;
   error = '';
   loading = false;
@@ -20,14 +21,43 @@ export class RegisterComponent {
 
   register(): void {
     this.error = '';
-    if (!this.accepted) { this.error = 'Please accept the Contributor Integrity Charter.'; return; }
+    if (!this.accepted) {
+      this.error = 'Please accept the Contributor Integrity Charter.';
+      return;
+    }
+    if (!this.firstName.trim() || !this.lastName.trim() || !this.email.trim() || !this.password) {
+      this.error = 'All fields are required.';
+      return;
+    }
+    if (this.password.length < 8) {
+      this.error = 'Password must be at least 8 characters long.';
+      return;
+    }
+
     this.loading = true;
     this.auth.register({
-      fullName: this.fullName.trim(), handle: this.handle.trim(), email: this.email.trim(),
-      password: this.password, specialty: this.specialty
+      firstName: this.firstName.trim(),
+      lastName: this.lastName.trim(),
+      email: this.email.trim(),
+      password: this.password
     }).subscribe({
-      next: () => this.router.navigate(['/user/dashboard']),
-      error: () => { this.error = 'Registration failed. Check the details or try another email.'; this.loading = false; }
+      next: (response) => {
+        this.loading = false;
+        if (response.user.role === 'ADMIN') {
+          this.router.navigate(['/admin/reviews']);
+        } else {
+          this.router.navigate(['/user/dashboard']);
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        this.error = err?.error?.message || 'Registration failed. Check your details or try another email.';
+      }
     });
+  }
+
+  closeModal(event: Event): void {
+    event.preventDefault();
+    this.router.navigate(['/']);
   }
 }

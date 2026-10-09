@@ -1,1 +1,72 @@
-<p>review-queue works!</p>
+<section class="portal-header">
+  <div>
+    <h1>Admin Review Moderation Queue</h1>
+    <p>Inspect incoming consumer reviews flagged for review or pending automated analysis.</p>
+  </div>
+</section>
+
+<div class="stats-row" *ngIf="stats">
+  <div class="stat-card">
+    <small>Total Users</small>
+    <b>{{ stats.totalUsers }}</b>
+  </div>
+  <div class="stat-card">
+    <small>Total Reviews</small>
+    <b>{{ stats.totalReviews }}</b>
+  </div>
+  <div class="stat-card">
+    <small>Published Reviews</small>
+    <b>{{ stats.publishedReviews }}</b>
+  </div>
+  <div class="stat-card">
+    <small>Pending Moderation</small>
+    <b>{{ stats.pendingReviews }}</b>
+  </div>
+  <div class="stat-card">
+    <small>Open Reports</small>
+    <b>{{ stats.openReports }}</b>
+  </div>
+</div>
+
+<p class="form-success" *ngIf="actionMessage">{{ actionMessage }}</p>
+
+<div class="portal-card">
+  <h2>Pending Review Submissions ({{ pendingReviews.length }})</h2>
+
+  <div class="queue-list" *ngIf="!loading && pendingReviews.length > 0">
+    <div class="queue-item" *ngFor="let r of pendingReviews">
+      <div class="queue-header">
+        <div>
+          <span class="status-badge pending">{{ r.status }}</span>
+          <span class="status-badge" [class.verified]="r.authenticityStatus==='VERIFIED'">AI Status: {{ r.authenticityStatus }}</span>
+          <h3>{{ r.headline }}</h3>
+          <small>Product: <b>{{ r.productName }}</b> ({{ r.category }}) · Author ID: {{ r.userId }}</small>
+        </div>
+        <div class="queue-score">
+          <b>⛨ {{ r.credibilityScore }} / 100</b>
+          <small>Credibility</small>
+        </div>
+      </div>
+
+      <div class="queue-body">
+        <p><b>Rating:</b> ★ {{ r.ratingValue }} / 5 · <b>Sentiment:</b> {{ r.sentiment }}</p>
+        <p class="review-text">"{{ r.reviewText }}"</p>
+        <small>Submitted on {{ r.createdAt | date:'medium' }}</small>
+      </div>
+
+      <div class="queue-actions">
+        <button class="button button-primary" (click)="moderate(r.id, 'PUBLISHED')">✓ Approve & Publish</button>
+        <button class="button button-light" (click)="moderate(r.id, 'HIDDEN')">👁️ Hide Review</button>
+        <button class="button button-danger" (click)="moderate(r.id, 'REMOVED')">🗑️ Remove Review</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && pendingReviews.length === 0">
+    <p>🎉 All clear! There are no reviews currently awaiting moderation.</p>
+  </div>
+
+  <div class="empty-state" *ngIf="loading">
+    <p>Loading moderation queue...</p>
+  </div>
+</div>

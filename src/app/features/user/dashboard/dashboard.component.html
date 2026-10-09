@@ -1,1 +1,85 @@
-<p>dashboard works!</p>
+<section class="portal-header">
+  <div>
+    <h1>Welcome back, {{ auth.getUserFullName() }}</h1>
+    <p>Track your published evaluations, community impact, reputation score, and earned badges.</p>
+  </div>
+  <a routerLink="/user/submit-review" class="button button-primary">+ Submit New Evaluation</a>
+</section>
+
+<div class="stats-row" *ngIf="summary">
+  <div class="stat-card">
+    <small>Total Reviews Submitted</small>
+    <b>{{ summary.reviewCount }}</b>
+  </div>
+  <div class="stat-card">
+    <small>Helpful Votes Received</small>
+    <b>👍 {{ summary.helpfulReactions }}</b>
+  </div>
+  <div class="stat-card">
+    <small>Reputation Score</small>
+    <b>⛨ {{ summary.reputationScore }} / 100</b>
+  </div>
+  <div class="stat-card">
+    <small>Badges Earned</small>
+    <b>🎖️ {{ summary.badgeCount }}</b>
+  </div>
+</div>
+
+<div class="portal-grid" *ngIf="summary">
+  <!-- Reviews Section -->
+  <section class="portal-card">
+    <h2>Your Evaluation History</h2>
+    <div class="table-responsive" *ngIf="summary.reviews && summary.reviews.length > 0">
+      <table class="portal-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Headline</th>
+            <th>Rating</th>
+            <th>Credibility</th>
+            <th>Status</th>
+            <th>Helpful</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of summary.reviews">
+            <td><b>{{ r.productName }}</b></td>
+            <td><a [routerLink]="['/reviews', r.id]">{{ r.headline }}</a></td>
+            <td>★ {{ r.ratingValue }}</td>
+            <td>⛨ {{ r.credibilityScore }}</td>
+            <td><span class="status-badge" [class.published]="r.status==='PUBLISHED'" [class.pending]="r.status==='PENDING'">{{ r.status }}</span></td>
+            <td>👍 {{ r.helpfulVoteCount }}</td>
+            <td>{{ r.createdAt | date:'shortDate' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="empty-state" *ngIf="!summary.reviews || summary.reviews.length === 0">
+      <p>You haven't submitted any reviews yet.</p>
+      <a routerLink="/user/submit-review" class="button button-primary">Submit Your First Review</a>
+    </div>
+  </section>
+
+  <!-- Badges Section -->
+  <aside class="portal-card">
+    <h2>Earned Reputation Badges</h2>
+    <div class="badge-list" *ngIf="summary.badges && summary.badges.length > 0">
+      <div class="badge-item" *ngFor="let b of summary.badges">
+        <div class="badge-icon">🎖️</div>
+        <div>
+          <b>{{ b.name }}</b>
+          <p>{{ b.description }}</p>
+          <small>Awarded {{ b.awardedAt | date:'mediumDate' }}</small>
+        </div>
+      </div>
+    </div>
+    <div class="empty-state" *ngIf="!summary.badges || summary.badges.length === 0">
+      <p>Submit helpful, authentic reviews to earn contributor badges!</p>
+    </div>
+  </aside>
+</div>
+
+<div class="empty-state" *ngIf="loading">
+  <p>Loading dashboard summary...</p>
+</div>

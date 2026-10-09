@@ -1,1 +1,54 @@
-<p>badge-rules works!</p>
+<section class="portal-header">
+  <div>
+    <h1>Badge System & Reward Configuration</h1>
+    <p>Configure reputation badges awarded to trusted contributors and helpful reviewers.</p>
+  </div>
+</section>
+
+<div class="portal-grid">
+  <!-- Badge List -->
+  <section class="portal-card">
+    <h2>Active System Badges ({{ badges.length }})</h2>
+    <div class="badge-list" *ngIf="!loading && badges.length > 0">
+      <div class="badge-item" *ngFor="let b of badges">
+        <div class="badge-icon">🎖️</div>
+        <div>
+          <b>{{ b.badgeName }}</b>
+          <p>{{ b.description }}</p>
+          <small><b>Earning Criteria:</b> {{ b.earningCriteria }}</small>
+        </div>
+      </div>
+    </div>
+    <div class="empty-state" *ngIf="loading">
+      <p>Loading badges...</p>
+    </div>
+  </section>
+
+  <!-- Create Badge Form -->
+  <aside class="portal-card">
+    <h2>Create New Badge</h2>
+    <form (ngSubmit)="createBadge()">
+      <div class="form-group">
+        <label>Badge Name *</label>
+        <input type="text" [(ngModel)]="badgeName" name="badgeName" placeholder="e.g. Master Reviewer" required>
+      </div>
+
+      <div class="form-group">
+        <label>Description *</label>
+        <textarea [(ngModel)]="description" name="description" rows="3" placeholder="Brief description of the badge award..." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Earning Criteria *</label>
+        <input type="text" [(ngModel)]="earningCriteria" name="earningCriteria" placeholder="e.g. Awarded for receiving 25+ helpful votes" required>
+      </div>
+
+      <p class="form-success" *ngIf="message">{{ message }}</p>
+      <p class="form-error" *ngIf="error">{{ error }}</p>
+
+      <button type="submit" class="button button-primary" [disabled]="submitting">
+        {{ submitting ? 'Creating...' : '+ Create Badge' }}
+      </button>
+    </form>
+  </aside>
+</div>

@@ -1,29 +1,31 @@
 <header class="site-header">
-    <a class="brand" routerLink="/" aria-label="Credify home">
-      <span class="brand-mark">✓</span>
-      <span>Credify</span><i></i>
-    </a>
-  
-    <nav class="main-nav" aria-label="Main navigation">
-      <a routerLink="/search" routerLinkActive="active">Explore</a>
-      <a routerLink="/how-it-works" routerLinkActive="active">How Credify Works</a>
-      <a routerLink="/" fragment="featured">Categories</a>
-    </nav>
-    <form class="nav-search" (submit)="$event.preventDefault(); search()">
-      <span aria-hidden="true">⌕</span>
-      <input name="headerSearch" type="search" [(ngModel)]="searchText" placeholder="Search reviews & companies..." aria-label="Search reviews and companies">
-      <button type="submit" aria-label="Search">→</button>
-    </form>
-  
-    <label class="nav-search">
-      <span aria-hidden="true">⌕</span>
-      <input type="search" placeholder="Search reviews & companies..." aria-label="Search reviews and companies">
-      <kbd>⌘K</kbd>
-    </label>
-  
-    <div class="nav-actions">
+  <a class="brand" routerLink="/" aria-label="Credify home">
+    <span class="brand-mark">✓</span>
+    <span>Credify</span>
+  </a>
+
+  <nav class="main-nav" aria-label="Main navigation">
+    <a routerLink="/search" routerLinkActive="active">Explore Reviews</a>
+    <a routerLink="/how-it-works" routerLinkActive="active">How Credify Works</a>
+  </nav>
+
+  <form class="nav-search" (submit)="$event.preventDefault(); search()">
+    <span aria-hidden="true">⌕</span>
+    <input name="headerSearch" type="search" [(ngModel)]="searchText" placeholder="Search reviews..." aria-label="Search reviews">
+    <button type="submit" aria-label="Search">→</button>
+  </form>
+
+  <div class="nav-actions">
+    <ng-container *ngIf="!auth.isAuthenticated()">
       <a class="sign-in" routerLink="/sign-in">Sign In</a>
       <a class="button button-primary join-button" routerLink="/register">Join Credify</a>
-      <button class="avatar-button" type="button" aria-label="Profile menu">☺</button>
-    </div>
-  </header>
+    </ng-container>
+
+    <ng-container *ngIf="auth.isAuthenticated()">
+      <a class="button button-primary" [routerLink]="auth.isAdmin() ? '/admin/reviews' : '/user/dashboard'">
+        Dashboard ({{ auth.getUserFullName() }})
+      </a>
+      <button class="button button-light" (click)="logout()">Sign Out</button>
+    </ng-container>
+  </div>
+</header>

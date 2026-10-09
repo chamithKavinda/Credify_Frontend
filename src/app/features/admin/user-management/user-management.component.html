@@ -1,1 +1,103 @@
-<span class="kicker">ADMIN CONSOLE · CONTRIBUTOR GOVERNANCE</span><div class="heading-row"><div><h1 class="panel-title">User Management</h1><p class="panel-lead">Search contributor accounts, review reputation and update account status.</p></div><button class="primary-action">＋ Invite Moderator</button></div><div class="admin-summary"><article><small>Platform users</small><b>128,450</b></article><article><small>Verified contributors</small><b>6,420</b></article><article><small>On probation</small><b>24</b></article><article><small>Suspended</small><b>8</b></article></div><div class="admin-filters"><input [(ngModel)]="query" placeholder="Search name or email"><select [(ngModel)]="statusFilter"><option>All</option><option>Active</option><option>Probation</option><option>Suspended</option></select></div><div class="table-wrap"><table><thead><tr><th>USER / IDENTITY</th><th>ROLE</th><th>REPUTATION</th><th>REVIEWS</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody><tr *ngFor="let user of filteredUsers"><td><b>{{ user.name }}</b><small>{{ user.email }}</small></td><td>{{ user.role }}</td><td><span class="score-tag">{{ user.reputation }}/100</span></td><td>{{ user.reviews }}</td><td><span class="status-tag" [class.suspended]="user.status==='Suspended'">{{ user.status }}</span></td><td><button class="row-action" (click)="toggleStatus(user)">{{ user.status==='Suspended' ? 'Restore' : 'Suspend' }}</button></td></tr></tbody></table><p class="empty-state" *ngIf="filteredUsers.length===0">No accounts match this search.</p></div><p class="admin-note">For this frontend demo, status changes are stored in memory only. Production account enforcement must happen in the backend.</p>
+<div class="page-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <h1>User Management</h1>
+      <p>View contributors, manage account statuses, and grant reputation badges.</p>
+    </div>
+  </header>
+
+  <!-- Alert Message -->
+  <div class="alert alert-success" *ngIf="message">
+    <span class="alert-icon">✓</span>
+    {{ message }}
+  </div>
+
+  <!-- Main Card -->
+  <div class="card">
+    <!-- Card Toolbar -->
+    <div class="card-toolbar">
+      <div class="toolbar-title">
+        <h2>Registered Users</h2>
+        <span class="count-pill">{{ users.length }}</span>
+      </div>
+      
+      <div class="toolbar-actions" *ngIf="badges.length > 0">
+        <label for="badgeSelect">Award Badge:</label>
+        <select id="badgeSelect" [(ngModel)]="selectedBadgeId" class="modern-select">
+          <option value="" disabled selected>Select a badge...</option>
+          <option *ngFor="let b of badges" [value]="b.id">{{ b.badgeName }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-responsive" *ngIf="!loading && users.length > 0">
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Role & Reputation</th>
+            <th>Status</th>
+            <th>Joined</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of users">
+            
+            <!-- User Profile Column -->
+            <td>
+              <div class="user-profile">
+                <div class="avatar">{{ u.firstName[0] }}{{ u.lastName[0] }}</div>
+                <div class="user-details">
+                  <span class="user-name">{{ u.firstName }} {{ u.lastName }}</span>
+                  <span class="user-email">{{ u.email }}</span>
+                </div>
+              </div>
+            </td>
+
+            <!-- Role & Reputation Column -->
+            <td>
+              <div class="role-rep">
+                <span class="badge role-badge">{{ u.role }}</span>
+                <span class="rep-score">⛨ {{ u.reputationScore || 0 }}</span>
+              </div>
+            </td>
+
+            <!-- Status Column -->
+            <td>
+              <span class="badge status-badge" 
+                    [ngClass]="u.accountStatus === 'ACTIVE' ? 'status-active' : 'status-suspended'">
+                {{ u.accountStatus | titlecase }}
+              </span>
+            </td>
+
+            <!-- Date Column -->
+            <td class="text-muted">{{ u.createdAt | date:'mediumDate' }}</td>
+
+            <!-- Actions Column -->
+            <td class="actions-cell">
+              <button class="btn btn-ghost" (click)="awardBadge(u.id)" *ngIf="badges.length > 0" title="Award Badge">
+                🎖️ Award
+              </button>
+              <button class="btn" 
+                      [ngClass]="u.accountStatus === 'ACTIVE' ? 'btn-danger' : 'btn-success'" 
+                      (click)="toggleStatus(u)" 
+                      *ngIf="u.role !== 'ADMIN'">
+                {{ u.accountStatus === 'SUSPENDED' ? 'Reactivate' : 'Suspend' }}
+              </button>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty / Loading State -->
+    <div class="loading-state" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading user accounts...</p>
+    </div>
+  </div>
+</div>
