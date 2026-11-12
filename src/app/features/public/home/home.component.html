@@ -1,65 +1,317 @@
 <app-site-header></app-site-header>
-<main>
-  <section class="hero">
-    <div class="hero-glow glow-one"></div><div class="hero-glow glow-two"></div>
-    <div class="hero-content">
-      <div class="eyebrow"><span class="live-dot"></span> CREDIFY ENGINE ACTIVE <b>·</b> Consumer Reviews Index</div>
-      <h1>Reviews with more context.<br><span>Decisions with more confidence.</span></h1>
-      <p>Credify combines authentic community feedback with transparent AI authenticity<br class="desktop-break"> analysis to help you make smarter decisions with trust.</p>
 
-      <form class="search-box" (submit)="$event.preventDefault(); search()">
-        <select aria-label="Choose category" (change)="selectedCategory = $any($event.target).value">
-          <option>All Categories</option>
-          <option *ngFor="let category of categories">{{ category }}</option>
-        </select>
-        <input type="search" placeholder="Search products, services, brands, or review topics..." aria-label="Search products" (input)="searchText = $any($event.target).value">
-        <button class="button button-primary" type="submit">Search Reviews <span>→</span></button>
+<main class="home-main">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-eyebrow">
+        <span class="pulse-indicator"></span>
+        <span>CREDIFY ENGINE ACTIVE · Independent Authenticity Index</span>
+      </div>
+
+      <h1 class="hero-title">
+        Reviews with real context.<br>
+        <span class="gradient-text">Decisions with real confidence.</span>
+      </h1>
+
+      <p class="hero-description">
+        Credify combines authentic community feedback with transparent AI linguistic and burst-velocity analysis to help you make smarter decisions with trust.
+      </p>
+
+      <!-- Search Bar -->
+      <form class="hero-search-card" (submit)="$event.preventDefault(); search()">
+        <div class="search-category-select">
+          <select aria-label="Select Category" (change)="selectedCategory = $any($event.target).value">
+            <option>All Categories</option>
+            <option *ngFor="let cat of categories">{{ cat }}</option>
+          </select>
+        </div>
+        <div class="search-divider"></div>
+        <div class="search-input-area">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="search" placeholder="Search products, brands, or review topics..." aria-label="Search products" (input)="searchText = $any($event.target).value">
+        </div>
+        <button class="button button-primary hero-submit-btn" type="submit">
+          <span>Search Reviews</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
       </form>
 
-      <div class="popular"><span>POPULAR:</span><a *ngFor="let category of categories" routerLink="/search" [queryParams]="{ category: category }">✦ {{ category }}</a></div>
+      <!-- Category Pills -->
+      <div class="hero-popular-tags">
+        <span class="popular-label">POPULAR:</span>
+        <div class="popular-pills">
+          <a *ngFor="let cat of categories.slice(0, 5)" routerLink="/search" [queryParams]="{ category: cat }" class="tag-pill">
+            {{ cat }}
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="distinction">
-    <strong>✦ The Credify Distinction:</strong>
-    <span>⭐ Star Rating (1–5) <small>= How much the buyer liked the product</small></span>
-    <span>⛨ Credibility Score (0–100) <small>= How genuine and trustworthy the review is</small></span>
-  </section>
-
-  <section class="section how-section" id="how-it-works">
-    <div class="section-heading split-heading">
-      <div><label class="kicker">SCIENTIFIC RIGOR</label><h2>How Credify Protects Truth</h2></div>
-      <p>A multi-layered authenticity engine designed to separate sincere consumer sentiment from incentivized review manipulation.</p>
-    </div>
-    <div class="steps-grid">
-      <article class="step-card"><div class="step-number">01</div><div class="step-icon">▤</div><h3>Read Genuine Experiences</h3><p>Community reviews with verified purchase contexts, structured pros and cons, and time-tested usage notes across days, weeks, and months of real use.</p><div class="mini-metric"><b>✓ Verified Buyer</b><span>6 Months In Use</span><i></i></div></article>
-      <article class="step-card"><div class="step-number teal">02</div><div class="step-icon teal-bg">⌘</div><h3>AI Authenticity Analysis</h3><p>Real-time linguistic scanning measuring semantic depth, repetitive copy bursts, unnatural sentiment polarity, and synchronized review blitzes.</p><div class="mini-metric"><b>Burst Velocity Analysis</b><span>Optimal</span><i></i></div></article>
-      <article class="step-card"><div class="step-number">03</div><div class="step-icon">⚖</div><h3>Understand Credibility</h3><p>Never get misled by inflated 5-star blitzes. Clearly distinguish customer satisfaction from independent review credibility and reviewer trust score.</p><div class="score-row"><span>★ 4.8 <small>Star Score</small></span><b>96/100 <small>Authenticity</small></b></div></article>
-    </div>
-  </section>
-
-  <section class="section featured-section" id="featured">
-    <div class="section-heading"><div><label class="kicker">LIVE VERIFIED INTELLIGENCE</label><h2>Featured Product Evaluations</h2><p>Compare satisfaction against verified review credibility scores side-by-side.</p></div><a class="text-link" routerLink="/search">View all analyzed products →</a></div>
-    <div class="product-grid">
-      <article class="product-card" *ngFor="let product of products">
-        <div class="product-art">{{ product.icon }}<span>{{ product.category }}</span></div>
-        <div class="product-body"><label>{{ product.category }}</label><h3>{{ product.name }}</h3><p>{{ product.description }}</p>
-          <div class="product-metrics"><div><small>Customer Satisfaction</small><b><span class="stars">★★★★★</span> {{ product.rating }}</b></div><div class="cred-score"><small>AI Credibility Index</small><b>{{ product.score }}<small>/100</small></b></div></div>
-          <div class="reviewer"><span class="avatar">ER</span><div><b>Verified reviewer</b><small>Community experience, independently analyzed</small></div><span class="rep">Top Reviewer</span></div>
-        </div><div class="product-foot"><span>{{ product.reviews }} helpful votes</span><a [routerLink]="product.id ? ['/reviews', product.id] : '/search'">Read analysis →</a></div>
-      </article>
+  <!-- Credify Distinction Banner -->
+  <section class="distinction-section">
+    <div class="distinction-container scroll-reveal">
+      <div class="distinction-badge">
+        <span class="sparkle">✦</span>
+        <span>The Credify Dual-Signal System</span>
+      </div>
+      <div class="distinction-items">
+        <div class="distinction-card">
+          <div class="distinction-icon star-icon">⭐</div>
+          <div>
+            <b>Star Rating (1–5 Stars)</b>
+            <p>Reflects how much the verified buyer personally liked the product.</p>
+          </div>
+        </div>
+        <div class="distinction-divider"></div>
+        <div class="distinction-card">
+          <div class="distinction-icon shield-icon">⛨</div>
+          <div>
+            <b>AI Credibility Score (0–100)</b>
+            <p>Measures how genuine, detailed, and manipulation-free the review is.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="section architecture-section">
-    <div class="architecture-copy"><label class="kicker">AUTHENTICITY ARCHITECTURE</label><h2>AI Highlights Patterns.<br>Humans Govern the Truth.</h2><p>Credify does not automatically censor or remove reviews based on automated guesswork. Our models detect statistical anomalies, phrasing reuse, and incentivized campaign signatures to assign objective credibility ratings.</p>
-      <ul><li><b>✓ Linguistic Fingerprinting</b><span>Flags synthesized AI reviews and copy-paste farm submissions using natural language markers.</span></li><li><b>✓ Temporal Velocity Checks</b><span>Finds coordinated review bursts and unusual patterns of positive reviews in short windows.</span></li><li><b>✓ Contributor Reputation Weighting</b><span>Long-standing reviewers with proof and community trust have stronger credibility weight.</span></li></ul><a class="text-link" routerLink="/how-it-works">Read our review integrity approach →</a>
+  <!-- How It Works Section -->
+  <section class="section" id="how-it-works">
+    <div class="section-container">
+      <div class="section-heading-center scroll-reveal">
+        <span class="kicker">SCIENTIFIC RIGOR</span>
+        <h2>How Credify Protects Review Authenticity</h2>
+        <p>A multi-layered authenticity architecture designed to separate organic consumer feedback from coordinated manipulation.</p>
+      </div>
+
+      <div class="steps-grid">
+        <article class="step-card scroll-reveal reveal-delay-1">
+          <div class="step-num">01</div>
+          <div class="step-icon">▤</div>
+          <h3>Read Genuine Experiences</h3>
+          <p>Community reviews with verified purchase contexts, structured pros and cons, and real usage metrics over days and months.</p>
+          <div class="step-chip">
+            <span class="check-mark">✓</span> Verified Buyer · 6 Months In Use
+          </div>
+        </article>
+
+        <article class="step-card featured-step scroll-reveal reveal-delay-2">
+          <div class="step-num step-num-highlight">02</div>
+          <div class="step-icon icon-highlight">⌘</div>
+          <h3>AI Authenticity Analysis</h3>
+          <p>Real-time linguistic scanning measuring semantic depth, repetitive copy bursts, unnatural sentiment polarity, and coordinated blitzes.</p>
+          <div class="step-chip chip-highlight">
+            <span class="check-mark">✓</span> Burst Velocity: Optimal
+          </div>
+        </article>
+
+        <article class="step-card scroll-reveal reveal-delay-3">
+          <div class="step-num">03</div>
+          <div class="step-icon">⚖</div>
+          <h3>Understand Credibility</h3>
+          <p>Never get misled by synthetic 5-star blitzes. Clearly distinguish subjective happiness from independent evidence-based credibility.</p>
+          <div class="step-chip">
+            ★ 4.8 Rating · ⛨ 96/100 Credibility
+          </div>
+        </article>
+      </div>
     </div>
-    <div class="scan-card"><div class="scan-top"><span class="live-dot"></span> Real-Time Review Authenticity Scan <small>Audit #CRD-89410</small></div><p class="excerpt">“Using the device for four weeks in dry climate. Noise level runs at 34dB on sleep mode...”</p><div class="progress-line"><span>Factual Specificity & Metrics Present</span><b>96%</b><i><em style="width:96%"></em></i></div><div class="progress-line"><span>Linguistic Organic Sentiment Flow</span><b>92%</b><i><em style="width:92%"></em></i></div><div class="progress-line"><span>Account Age & History Consistency</span><b>89%</b><i><em style="width:89%"></em></i></div><div class="verdict"><span>✓</span><div><small>CUMULATIVE VERDICT</small><b>Verified Authentic (Score: 92)</b></div></div></div>
   </section>
 
-  <section class="stats"><div><b>42,000+</b><span>Products Analyzed</span></div><div><b>99.4%</b><span>Review Precision</span></div><div><b>128k</b><span>Verified Contributors</span></div><div><b>0%</b><span>Sponsored Bias</span></div></section>
+  <!-- Featured Products Section -->
+  <section class="section alt-bg" id="featured">
+    <div class="section-container">
+      <div class="section-heading-split scroll-reveal">
+        <div>
+          <span class="kicker">LIVE EVALUATIONS</span>
+          <h2>Featured Product Evaluations</h2>
+          <p>Compare user satisfaction against verified AI credibility scores side-by-side.</p>
+        </div>
+        <a class="button button-light" routerLink="/search">
+          <span>View All Products →</span>
+        </a>
+      </div>
 
-  <section class="cta-wrap"><div class="cta"><div class="cta-icon">⛨</div><h2>Ready to Make Decisions Based on Real<br>Data, Not Paid Hype?</h2><p>Search over 40,000+ AI-inspected products or lend your voice to the<br>community as a verified contributor.</p><div><a class="button button-primary" routerLink="/search">◎ Explore Analyzed Reviews</a><a class="button button-light" routerLink="/register">Become a Verified Contributor</a></div></div></section>
+      <div class="product-grid">
+        <article class="product-card scroll-reveal" *ngFor="let product of products">
+          <div class="product-art">
+            <span class="product-emoji">{{ product.icon }}</span>
+            <span class="category-tag">{{ product.category }}</span>
+          </div>
+
+          <div class="product-body">
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+
+            <div class="product-metrics-row">
+              <div class="metric-block">
+                <small>Satisfaction</small>
+                <div class="stars-val">
+                  <span class="stars-gold">★★★★★</span>
+                  <b>{{ product.rating }}</b>
+                </div>
+              </div>
+
+              <div class="metric-block score-block">
+                <small>AI Credibility</small>
+                <div class="cred-val">
+                  <b>⛨ {{ product.score }}</b>
+                  <small>/100</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-footer">
+            <span class="helpful-stat">👍 {{ product.reviews }} helpful</span>
+            <a [routerLink]="product.id ? ['/reviews', product.id] : '/search'" class="read-link">
+              Read Analysis →
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Authenticity Architecture Section -->
+  <section class="section">
+    <div class="section-container architecture-grid">
+      <div class="architecture-copy scroll-reveal reveal-left">
+        <span class="kicker">AUTHENTICITY ARCHITECTURE</span>
+        <h2>AI Highlights Patterns.<br>Humans Govern the Truth.</h2>
+        <p>Credify does not arbitrarily censor reviews based on guesswork. Our algorithms identify statistical anomalies, copy-paste reuse, and campaign signatures to assign objective trust weights.</p>
+        
+        <div class="feature-bullets">
+          <div class="bullet-item">
+            <div class="bullet-check">✓</div>
+            <div>
+              <b>Linguistic Fingerprinting</b>
+              <p>Flags AI-generated reviews and copy-paste farm submissions using natural language markers.</p>
+            </div>
+          </div>
+          <div class="bullet-item">
+            <div class="bullet-check">✓</div>
+            <div>
+              <b>Temporal Velocity Checks</b>
+              <p>Detects coordinated review bursts and unnatural clusters of 5-star ratings in short windows.</p>
+            </div>
+          </div>
+          <div class="bullet-item">
+            <div class="bullet-check">✓</div>
+            <div>
+              <b>Contributor Reputation Weighting</b>
+              <p>Long-standing community reviewers with high accuracy earn higher credibility weight.</p>
+            </div>
+          </div>
+        </div>
+
+        <a routerLink="/how-it-works" class="button button-primary">
+          <span>Read Our Full Integrity Approach →</span>
+        </a>
+      </div>
+
+      <!-- Live Scan Card Preview -->
+      <div class="scan-card scroll-reveal reveal-right">
+        <div class="scan-header">
+          <div class="scan-title">
+            <span class="live-dot"></span>
+            <b>Real-Time Authenticity Audit</b>
+          </div>
+          <span class="audit-id">#CRD-89410</span>
+        </div>
+
+        <blockquote class="scan-excerpt">
+          “Using this device for 4 weeks in a dry climate. Ambient sound level measures at 34dB on sleep mode...”
+        </blockquote>
+
+        <div class="progress-meter">
+          <div class="meter-info">
+            <span>Factual Specificity & Parameters</span>
+            <b>96%</b>
+          </div>
+          <div class="meter-track">
+            <div class="meter-fill" style="width: 96%"></div>
+          </div>
+        </div>
+
+        <div class="progress-meter">
+          <div class="meter-info">
+            <span>Natural Linguistic Sentiment Flow</span>
+            <b>92%</b>
+          </div>
+          <div class="meter-track">
+            <div class="meter-fill" style="width: 92%"></div>
+          </div>
+        </div>
+
+        <div class="progress-meter">
+          <div class="meter-info">
+            <span>Account History & Purchase Context</span>
+            <b>89%</b>
+          </div>
+          <div class="meter-track">
+            <div class="meter-fill" style="width: 89%"></div>
+          </div>
+        </div>
+
+        <div class="verdict-banner">
+          <span class="verdict-badge">✓</span>
+          <div>
+            <small>CUMULATIVE VERDICT</small>
+            <b>Verified Authentic (Score: 92/100)</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Big Numbers Stats Bar -->
+  <section class="stats-bar-section">
+    <div class="section-container stats-bar-grid scroll-reveal">
+      <div class="stat-item">
+        <b>42,000+</b>
+        <span>Products Analyzed</span>
+      </div>
+      <div class="stat-item">
+        <b>99.4%</b>
+        <span>Review Precision</span>
+      </div>
+      <div class="stat-item">
+        <b>128,000+</b>
+        <span>Verified Contributors</span>
+      </div>
+      <div class="stat-item">
+        <b>0%</b>
+        <span>Sponsored Bias</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modern Light CTA Card -->
+  <section class="cta-section">
+    <div class="section-container">
+      <div class="cta-card scroll-reveal reveal-scale">
+        <div class="cta-icon-badge">⛨</div>
+        <h2>Ready to Make Decisions Based on Real Data?</h2>
+        <p>Explore over 40,000+ AI-inspected products or lend your voice to the community as a verified contributor.</p>
+        <div class="cta-actions">
+          <a class="button button-primary button-lg" routerLink="/search">
+            <span>Explore Analyzed Reviews</span>
+          </a>
+          <a class="button button-light button-lg" routerLink="/register">
+            <span>Become a Verified Contributor</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
+
 <app-site-footer></app-site-footer>

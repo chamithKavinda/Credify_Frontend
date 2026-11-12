@@ -1,1 +1,57 @@
-<p>view-profile works!</p>
+<section class="portal-header">
+  <div>
+    <span class="kicker">PUBLIC CONTRIBUTOR PROFILE</span>
+    <h1>Contributor Details</h1>
+    <p>View public contributor verification credentials, trust score, and earned recognition badges.</p>
+  </div>
+  <a routerLink="/user/dashboard" class="button button-light button-sm">
+    ← Back to Dashboard
+  </a>
+</section>
+
+<div class="portal-card profile-hero-card" *ngIf="!loading && profile">
+  <div class="profile-avatar-large">{{ initials }}</div>
+  <div class="profile-hero-meta">
+    <div class="hero-top-row">
+      <h2>{{ profile.firstName }} {{ profile.lastName }}</h2>
+      <span class="status-badge status-active">Verified Contributor</span>
+    </div>
+    <p class="profile-email">Member ID: {{ userId }}</p>
+
+    <!-- Trust Score Meter -->
+    <div class="trust-meter-wrap">
+      <div class="meter-labels">
+        <span>Reputation Trust Score</span>
+        <b>⛨ {{ profile.reputationScore || 0 }} / 100</b>
+      </div>
+      <div class="meter-track">
+        <div class="meter-fill" [style.width.%]="profile.reputationScore || 0"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="portal-card" *ngIf="!loading && profile && profile.badges && profile.badges.length > 0">
+  <h2>Earned Reputation Badges ({{ profile.badges.length }})</h2>
+  <div class="badge-list">
+    <div class="badge-item-profile" *ngFor="let b of profile.badges">
+      <div class="badge-icon-pill">🎖️</div>
+      <div class="badge-meta">
+        <b>{{ b.name }}</b>
+        <p>{{ b.description }}</p>
+        <small>Unlocked {{ b.awardedAt | date:'mediumDate' }}</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="empty-state" *ngIf="!loading && !profile">
+  <div class="empty-icon">👤</div>
+  <h3>Contributor Profile Not Found</h3>
+  <p>The requested contributor profile does not exist or has been removed.</p>
+  <a routerLink="/user/dashboard" class="button button-primary">Back to Dashboard</a>
+</div>
+
+<div class="empty-state" *ngIf="loading">
+  <p>Loading contributor profile...</p>
+</div>

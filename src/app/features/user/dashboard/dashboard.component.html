@@ -1,40 +1,87 @@
 <section class="portal-header">
   <div>
+    <span class="kicker">CONTRIBUTOR OVERVIEW</span>
     <h1>Welcome back, {{ auth.getUserFullName() }}</h1>
-    <p>Track your published evaluations, community impact, reputation score, and earned badges.</p>
+    <p>Monitor your verified evaluations, community trust status, reputation score, and earned contributor milestones.</p>
   </div>
-  <a routerLink="/user/submit-review" class="button button-primary">+ Submit New Evaluation</a>
+  <a routerLink="/user/submit-review" class="button button-primary">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+    <span>Submit New Evaluation</span>
+  </a>
 </section>
 
+<!-- 4 Modern Stat Cards -->
 <div class="stats-row" *ngIf="summary">
   <div class="stat-card">
-    <small>Total Reviews Submitted</small>
-    <b>{{ summary.reviewCount }}</b>
+    <div class="stat-icon-wrapper review-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <small>Reviews Submitted</small>
+      <b>{{ summary.reviewCount }}</b>
+    </div>
   </div>
+
   <div class="stat-card">
-    <small>Helpful Votes Received</small>
-    <b>👍 {{ summary.helpfulReactions }}</b>
+    <div class="stat-icon-wrapper helpful-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <small>Helpful Reactions</small>
+      <b>{{ summary.helpfulReactions }}</b>
+    </div>
   </div>
-  <div class="stat-card">
-    <small>Reputation Score</small>
-    <b>⛨ {{ summary.reputationScore }} / 100</b>
+
+  <div class="stat-card trust-card">
+    <div class="stat-icon-wrapper trust-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <small>Reputation Score</small>
+      <b class="trust-value">⛨ {{ summary.reputationScore }} <small class="denom">/ 100</small></b>
+    </div>
   </div>
+
   <div class="stat-card">
-    <small>Badges Earned</small>
-    <b>🎖️ {{ summary.badgeCount }}</b>
+    <div class="stat-icon-wrapper badge-icon-box">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="6"></circle>
+        <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <small>Badges Earned</small>
+      <b>{{ summary.badgeCount }}</b>
+    </div>
   </div>
 </div>
 
 <div class="portal-grid" *ngIf="summary">
-  <!-- Reviews Section -->
+  <!-- Left Column: Evaluation History -->
   <section class="portal-card">
-    <h2>Your Evaluation History</h2>
+    <div class="card-toolbar-row">
+      <div>
+        <h2>Recent Evaluations</h2>
+        <p class="toolbar-sub">Your latest consumer submissions and their verification status.</p>
+      </div>
+      <a routerLink="/user/history" class="view-all-link">View All Reviews →</a>
+    </div>
+
     <div class="table-responsive" *ngIf="summary.reviews && summary.reviews.length > 0">
       <table class="portal-table">
         <thead>
           <tr>
-            <th>Product</th>
-            <th>Headline</th>
+            <th>Product & Title</th>
             <th>Rating</th>
             <th>Credibility</th>
             <th>Status</th>
@@ -44,38 +91,88 @@
         </thead>
         <tbody>
           <tr *ngFor="let r of summary.reviews">
-            <td><b>{{ r.productName }}</b></td>
-            <td><a [routerLink]="['/reviews', r.id]">{{ r.headline }}</a></td>
-            <td>★ {{ r.ratingValue }}</td>
-            <td>⛨ {{ r.credibilityScore }}</td>
-            <td><span class="status-badge" [class.published]="r.status==='PUBLISHED'" [class.pending]="r.status==='PENDING'">{{ r.status }}</span></td>
-            <td>👍 {{ r.helpfulVoteCount }}</td>
-            <td>{{ r.createdAt | date:'shortDate' }}</td>
+            <td>
+              <div class="review-cell">
+                <span class="product-tag">{{ r.productName }}</span>
+                <a [routerLink]="['/reviews', r.id]" class="headline-link">{{ r.headline }}</a>
+              </div>
+            </td>
+            <td>
+              <span class="rating-pill">★ {{ r.ratingValue }}</span>
+            </td>
+            <td>
+              <span class="cred-pill" [class.high]="r.credibilityScore >= 80" [class.med]="r.credibilityScore >= 60 && r.credibilityScore < 80">
+                ⛨ {{ r.credibilityScore }}
+              </span>
+            </td>
+            <td>
+              <span class="status-badge" [class.published]="r.status==='PUBLISHED'" [class.pending]="r.status==='PENDING'">
+                {{ r.status }}
+              </span>
+            </td>
+            <td>
+              <span class="helpful-count">👍 {{ r.helpfulVoteCount }}</span>
+            </td>
+            <td>
+              <span class="date-text">{{ r.createdAt | date:'shortDate' }}</span>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
+
     <div class="empty-state" *ngIf="!summary.reviews || summary.reviews.length === 0">
-      <p>You haven't submitted any reviews yet.</p>
+      <div class="empty-icon">✍️</div>
+      <h3>No Evaluations Yet</h3>
+      <p>Submit your first product evaluation to start earning community reputation and badges.</p>
       <a routerLink="/user/submit-review" class="button button-primary">Submit Your First Review</a>
     </div>
   </section>
 
-  <!-- Badges Section -->
-  <aside class="portal-card">
-    <h2>Earned Reputation Badges</h2>
-    <div class="badge-list" *ngIf="summary.badges && summary.badges.length > 0">
-      <div class="badge-item" *ngFor="let b of summary.badges">
-        <div class="badge-icon">🎖️</div>
+  <!-- Right Column: Badges & Contributor Tips -->
+  <aside class="right-column-stack">
+    <!-- Badges Card -->
+    <div class="portal-card">
+      <div class="card-toolbar-row">
         <div>
-          <b>{{ b.name }}</b>
-          <p>{{ b.description }}</p>
-          <small>Awarded {{ b.awardedAt | date:'mediumDate' }}</small>
+          <h2>Earned Badges</h2>
+          <p class="toolbar-sub">Reputation milestones unlocked.</p>
         </div>
       </div>
+
+      <div class="badge-list" *ngIf="summary.badges && summary.badges.length > 0">
+        <div class="badge-item-mini" *ngFor="let b of summary.badges">
+          <div class="badge-icon-bubble">🎖️</div>
+          <div class="badge-meta">
+            <b>{{ b.name }}</b>
+            <p>{{ b.description }}</p>
+            <small>Unlocked {{ b.awardedAt | date:'mediumDate' }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="!summary.badges || summary.badges.length === 0">
+        <div class="empty-icon">🎖️</div>
+        <h3>No Badges Yet</h3>
+        <p>Post authentic, helpful reviews to unlock contributor badges.</p>
+      </div>
     </div>
-    <div class="empty-state" *ngIf="!summary.badges || summary.badges.length === 0">
-      <p>Submit helpful, authentic reviews to earn contributor badges!</p>
+
+    <!-- Credibility Tips Card -->
+    <div class="portal-card tip-card">
+      <div class="tip-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <h3>How to Earn High Credibility</h3>
+      </div>
+      <ul class="tip-list">
+        <li><b>Include specific details:</b> Mention usage duration (e.g. 3 months) and clear metrics.</li>
+        <li><b>Balance pros and cons:</b> Honest trade-offs signal authentic, unbiased experience.</li>
+        <li><b>Avoid repetitive copy:</b> Organic descriptions score significantly higher on linguistic analysis.</li>
+      </ul>
     </div>
   </aside>
 </div>

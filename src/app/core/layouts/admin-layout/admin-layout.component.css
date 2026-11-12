@@ -1,190 +1,132 @@
-@import '../user-layout/user-layout.component.css';
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+}
 
 .admin-layout {
-  background: #f8fafc;
-  color: #0f172a;
-}
-
-.admin-layout .portal-content {
-  background: #f1f5f9;
-  padding: 40px 48px;
-  min-height: 100vh;
-}
-
-/* Admin Header Styling */
-.admin-layout .portal-header h1 {
-  color: #0f172a !important;
-  font-size: 2.2rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  margin-bottom: 6px;
-}
-
-.admin-layout .portal-header p {
-  color: #475569 !important;
-  font-size: 1.05rem;
-}
-
-/* Stat Cards in Admin */
-.admin-layout .stat-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
-  transition: all 0.2s ease;
-}
-
-.admin-layout .stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.08);
-  border-color: #cbd5e1;
-}
-
-.admin-layout .stat-card small {
-  color: #64748b !important;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  font-size: 0.78rem;
-}
-
-.admin-layout .stat-card b {
-  color: #0f172a !important;
-  font-size: 2.2rem;
-  font-weight: 800;
-}
-
-/* Admin Cards */
-.admin-layout .portal-card {
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 20px !important;
-  padding: 32px !important;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04) !important;
-  margin-bottom: 32px;
-}
-
-.admin-layout .portal-card h2 {
-  color: #0f172a !important;
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin-bottom: 24px;
-}
-
-/* Table Styling in Admin */
-.admin-layout .portal-table {
-  background: #ffffff;
-  border-radius: 12px;
-  overflow: hidden;
-  width: 100%;
-}
-
-.admin-layout .portal-table th {
-  background: #f8fafc !important;
-  color: #475569 !important;
-  font-weight: 700 !important;
-  font-size: 0.8rem !important;
-  border-bottom: 2px solid #e2e8f0 !important;
-  padding: 14px 18px !important;
-}
-
-.admin-layout .portal-table td {
-  color: #1e293b !important;
-  font-size: 0.95rem !important;
-  border-bottom: 1px solid #f1f5f9 !important;
-  padding: 18px !important;
-}
-
-.admin-layout .portal-table tr:hover td {
-  background: #f8fafc !important;
-}
-
-/* Select Dropdown inside Card Header */
-.admin-layout .card-header-flex {
   display: flex;
-  justify-content: space-between;
+  min-height: 100vh;
+  background: var(--color-slate-50);
+}
+
+.portal-main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--color-slate-50);
+}
+
+.admin-topbar {
+  height: 64px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--color-slate-200);
+  padding: 0 36px;
+  display: flex;
   align-items: center;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
-.admin-layout .card-header-flex h2 {
-  margin-bottom: 0;
+.system-status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  background: var(--color-emerald-bg);
+  border: 1px solid var(--color-emerald-border);
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  color: var(--color-emerald-text);
 }
 
-.admin-layout .badge-select-tool {
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-emerald);
+  box-shadow: 0 0 8px var(--color-emerald);
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.topbar-right {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.admin-layout .badge-select-tool select {
-  height: 42px;
-  padding: 0 16px;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 10px;
-  background: #ffffff;
-  color: #0f172a;
+.topbar-action-pill {
+  font-size: 13px;
   font-weight: 600;
-  outline: none;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  color: var(--color-slate-600);
+  background: var(--color-slate-100);
+  border: 1px solid var(--color-slate-200);
+  text-decoration: none;
+  transition: all var(--transition-fast);
 }
 
-/* Queue List Items */
-.admin-layout .queue-item {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 20px;
-  transition: all 0.2s ease;
+.topbar-action-pill:hover {
+  background: var(--color-slate-200);
+  color: var(--color-slate-900);
 }
 
-.admin-layout .queue-item:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+.topbar-action-pill.pill-active {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border-color: var(--color-primary-border);
 }
 
-.admin-layout .queue-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-  gap: 16px;
+.topbar-site-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
 }
 
-.admin-layout .queue-header h3 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #0f172a;
-  margin: 8px 0 4px;
+.topbar-site-link:hover {
+  background: var(--color-primary-light);
 }
 
-.admin-layout .queue-score b {
-  font-size: 1.4rem;
-  color: #4f46e5;
-  font-weight: 800;
+.portal-content {
+  flex: 1;
+  padding: 36px 40px;
+  overflow-y: auto;
+  animation: panelFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.admin-layout .queue-body .review-text {
-  font-size: 1.05rem;
-  color: #334155;
-  line-height: 1.6;
-  background: #ffffff;
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  margin: 12px 0;
+.content-container {
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.admin-layout .queue-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-@media (max-width: 768px) {
-  .admin-layout .portal-content {
-    padding: 24px 16px;
+@media (max-width: 860px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+  .admin-topbar {
+    padding: 0 16px;
+    height: 54px;
+  }
+  .portal-content {
+    padding: 20px 16px;
+  }
+  .topbar-action-pill {
+    display: none;
   }
 }

@@ -4,7 +4,6 @@ import { ReviewService } from '../../../core/services/review.service';
 
 @Component({
   selector: 'app-submit-review',
-  standalone: false,
   templateUrl: './submit-review.component.html',
   styleUrls: ['./submit-review.component.css']
 })
@@ -28,10 +27,26 @@ export class SubmitReviewComponent {
     'Power & Chargers'
   ];
 
+  ratingDescriptions: { [key: number]: string } = {
+    5: 'Exceptional — Exceeded all expectations',
+    4: 'Great — Very satisfied with minor caveats',
+    3: 'Average — Meets basic expectations',
+    2: 'Below Average — Noticeable flaws and limitations',
+    1: 'Poor — Significant issues encountered'
+  };
+
   constructor(
     private reviewService: ReviewService,
     private router: Router
   ) {}
+
+  setRating(val: number): void {
+    this.ratingValue = val;
+  }
+
+  get wordCount(): number {
+    return this.reviewText.trim() ? this.reviewText.trim().split(/\s+/).length : 0;
+  }
 
   submit(): void {
     this.error = '';
@@ -40,7 +55,7 @@ export class SubmitReviewComponent {
       return;
     }
     if (this.reviewText.trim().length < 10) {
-      this.error = 'Review text must be at least 10 characters long.';
+      this.error = 'Review evaluation must be at least 10 characters long.';
       return;
     }
 

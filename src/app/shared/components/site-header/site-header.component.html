@@ -1,31 +1,81 @@
-<header class="site-header">
-  <a class="brand" routerLink="/" aria-label="Credify home">
-    <span class="brand-mark">✓</span>
-    <span>Credify</span>
-  </a>
+<header class="site-header" [class.scrolled]="isScrolled">
+  <div class="scroll-progress-line" [style.width.%]="scrollProgress"></div>
+  <div class="header-container">
+    <a class="brand" routerLink="/" aria-label="Credify home">
+      <span class="brand-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </span>
+      <span class="brand-text">
+        <span class="brand-title">Credify</span>
+        <span class="brand-dot"></span>
+      </span>
+    </a>
 
-  <nav class="main-nav" aria-label="Main navigation">
-    <a routerLink="/search" routerLinkActive="active">Explore Reviews</a>
-    <a routerLink="/how-it-works" routerLinkActive="active">How Credify Works</a>
-  </nav>
-
-  <form class="nav-search" (submit)="$event.preventDefault(); search()">
-    <span aria-hidden="true">⌕</span>
-    <input name="headerSearch" type="search" [(ngModel)]="searchText" placeholder="Search reviews..." aria-label="Search reviews">
-    <button type="submit" aria-label="Search">→</button>
-  </form>
-
-  <div class="nav-actions">
-    <ng-container *ngIf="!auth.isAuthenticated()">
-      <a class="sign-in" routerLink="/sign-in">Sign In</a>
-      <a class="button button-primary join-button" routerLink="/register">Join Credify</a>
-    </ng-container>
-
-    <ng-container *ngIf="auth.isAuthenticated()">
-      <a class="button button-primary" [routerLink]="auth.isAdmin() ? '/admin/reviews' : '/user/dashboard'">
-        Dashboard ({{ auth.getUserFullName() }})
+    <nav class="main-nav" aria-label="Main navigation">
+      <a routerLink="/search" routerLinkActive="active">
+        <span>Explore Reviews</span>
       </a>
-      <button class="button button-light" (click)="logout()">Sign Out</button>
-    </ng-container>
+      <a routerLink="/how-it-works" routerLinkActive="active">
+        <span>How Credify Works</span>
+      </a>
+    </nav>
+
+    <!-- Search in Header -->
+    <form class="nav-search" (submit)="$event.preventDefault(); search()">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input name="headerSearch" type="search" [(ngModel)]="searchText" placeholder="Search products, brands, reviews..." aria-label="Search reviews">
+      <button type="submit" class="search-submit" aria-label="Submit search">↵</button>
+    </form>
+
+    <!-- Auth Actions -->
+    <div class="nav-actions">
+      <ng-container *ngIf="!auth.isAuthenticated()">
+        <a class="sign-in-link" routerLink="/sign-in">Sign In</a>
+        <a class="button button-primary join-btn" routerLink="/register">
+          <span>Join Credify</span>
+        </a>
+      </ng-container>
+
+      <ng-container *ngIf="auth.isAuthenticated()">
+        <a class="user-dashboard-btn" [routerLink]="auth.isAdmin() ? '/admin/reviews' : '/user/dashboard'">
+          <span class="user-nav-avatar">{{ initials }}</span>
+          <span class="user-nav-name">{{ auth.getUserFullName() }}</span>
+          <span class="role-pill" [class.admin-pill]="auth.isAdmin()">{{ auth.isAdmin() ? 'Admin' : 'Member' }}</span>
+        </a>
+        <button class="button button-light button-sm" (click)="logout()">Sign Out</button>
+      </ng-container>
+
+      <!-- Mobile Hamburger Toggle -->
+      <button type="button" class="mobile-toggle" (click)="toggleMobileMenu()" aria-label="Toggle navigation">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer" *ngIf="mobileMenuOpen">
+    <nav class="mobile-nav-links">
+      <a routerLink="/search" (click)="mobileMenuOpen=false">Explore Reviews</a>
+      <a routerLink="/how-it-works" (click)="mobileMenuOpen=false">How Credify Works</a>
+      <ng-container *ngIf="!auth.isAuthenticated()">
+        <a routerLink="/sign-in" (click)="mobileMenuOpen=false">Sign In</a>
+        <a routerLink="/register" class="mobile-highlight" (click)="mobileMenuOpen=false">Join Credify</a>
+      </ng-container>
+      <ng-container *ngIf="auth.isAuthenticated()">
+        <a [routerLink]="auth.isAdmin() ? '/admin/reviews' : '/user/dashboard'" (click)="mobileMenuOpen=false">
+          {{ auth.isAdmin() ? 'Admin Portal' : 'User Portal' }} ({{ auth.getUserFullName() }})
+        </a>
+        <button (click)="logout()" class="mobile-sign-out">Sign Out</button>
+      </ng-container>
+    </nav>
   </div>
 </header>

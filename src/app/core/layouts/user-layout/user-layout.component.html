@@ -1,6 +1,27 @@
-<div class="portal-layout">
+<div class="portal-layout user-layout">
   <app-user-sidebar></app-user-sidebar>
-  <main class="portal-content">
-    <router-outlet></router-outlet>
-  </main>
+  <div class="portal-main-area">
+    <header class="user-topbar">
+      <div class="topbar-left">
+        <span class="user-role-indicator">
+          <span class="role-dot"></span>
+          <span class="role-text">Verified Contributor Network</span>
+        </span>
+      </div>
+      <div class="topbar-right">
+        <a routerLink="/user/submit-review" class="button button-primary button-sm">
+          <span>+ Submit Review</span>
+        </a>
+        <a routerLink="/search" class="topbar-site-link">
+          <span>Explore Reviews</span> ↗
+        </a>
+      </div>
+    </header>
+
+    <main class="portal-content">
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
 </div>

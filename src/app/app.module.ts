@@ -34,6 +34,7 @@ import { ReportsComponent } from './features/admin/reports/reports.component';
 import { UserManagementComponent } from './features/admin/user-management/user-management.component';
 import { PlatformSettingsComponent } from './features/admin/platform-settings/platform-settings.component';
 import { ProductCardComponent } from './shared/components/product-card/product-card.component';
+import { ScrollRevealDirective } from './shared/directives/scroll-reveal.directive';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { apiInterceptor } from './core/http/api.interceptor';
 
@@ -69,7 +70,8 @@ import { apiInterceptor } from './core/http/api.interceptor';
     ReportsComponent,
     UserManagementComponent,
     PlatformSettingsComponent,
-    ProductCardComponent
+    ProductCardComponent,
+    ScrollRevealDirective
   ],
   imports: [
     BrowserModule,

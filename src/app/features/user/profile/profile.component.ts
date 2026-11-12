@@ -4,7 +4,6 @@ import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-profile',
-  standalone: false,
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
@@ -43,6 +42,10 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  get initials(): string {
+    return `${(this.firstName || 'U')[0]}${(this.lastName || '')[0] || ''}`.toUpperCase();
+  }
+
   saveProfile(): void {
     this.successMsg = '';
     this.errorMsg = '';
@@ -58,8 +61,7 @@ export class ProfileComponent implements OnInit {
     }).subscribe({
       next: (updatedUser) => {
         this.saving = false;
-        this.successMsg = 'Profile updated successfully!';
-        // Update local session
+        this.successMsg = 'Profile details updated successfully!';
         const current = this.auth.currentUser;
         if (current) {
           current.firstName = updatedUser.firstName;

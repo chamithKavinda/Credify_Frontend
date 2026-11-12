@@ -1,12 +1,19 @@
 :host {
   display: block;
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 .site-footer {
-  background: var(--color-slate-900);
-  padding: 64px 5% 32px;
-  color: var(--color-slate-300);
-  border-top: 1px solid var(--color-slate-800);
+  background: #ffffff;
+  border-top: 1px solid var(--color-slate-200);
+  padding: 60px 0 32px;
+  color: var(--color-slate-600);
+}
+
+.footer-container {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 .footer-main {
@@ -14,119 +21,129 @@
   grid-template-columns: 2.5fr repeat(3, 1fr);
   gap: 48px;
   padding-bottom: 48px;
-  border-bottom: 1px solid var(--color-slate-800);
+  border-bottom: 1px solid var(--color-slate-100);
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: #ffffff;
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 800;
   text-decoration: none;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .brand-mark {
   width: 34px;
   height: 34px;
-  display: grid;
-  place-items: center;
   border-radius: var(--radius-md);
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   color: #ffffff;
-  font-size: 18px;
+  display: grid;
+  place-items: center;
   box-shadow: var(--shadow-glow);
 }
 
-.brand i {
-  width: 6px;
-  height: 6px;
-  background: var(--color-teal);
-  border-radius: 50%;
-  margin-left: -2px;
+.brand-name {
+  color: var(--color-slate-900);
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
-.footer-brand p {
-  max-width: 300px;
-  color: var(--color-slate-400);
-  font-size: 15px;
-  line-height: 1.6;
+.footer-tagline {
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  color: var(--color-slate-500);
+  line-height: 1.5;
+  max-width: 320px;
   margin-bottom: 16px;
 }
 
-.footer-brand > b {
-  font-size: 13px;
-  color: var(--color-teal-light);
-  background: rgba(13, 148, 136, 0.15);
-  padding: 6px 12px;
+.trust-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  background: var(--color-emerald-bg);
+  border: 1px solid var(--color-emerald-border);
   border-radius: var(--radius-full);
-  display: inline-block;
-  border: 1px solid rgba(13, 148, 136, 0.3);
-  font-weight: 600;
-}
-
-.footer-main h4 {
-  color: #ffffff;
-  margin: 0 0 20px;
-  font-size: 15px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  color: var(--color-emerald-text);
 }
 
-.footer-main > div:not(:first-child) a {
+.footer-column h4 {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-slate-900);
+  margin-bottom: 18px;
+}
+
+.footer-column a {
   display: block;
-  color: var(--color-slate-400);
+  font-size: 0.9rem;
+  color: var(--color-slate-500);
   text-decoration: none;
-  font-size: 15px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   transition: all var(--transition-fast);
 }
 
-.footer-main a:hover {
-  color: #ffffff;
-  transform: translateX(3px);
+.footer-column a:hover {
+  color: var(--color-primary);
+  transform: translateX(2px);
 }
 
 .footer-bottom {
-  padding-top: 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  color: var(--color-slate-500);
-  font-size: 14px;
-}
-
-.footer-bottom span:last-child {
-  display: flex;
-  gap: 24px;
-}
-
-.footer-bottom a {
+  padding-top: 28px;
+  font-size: 0.85rem;
   color: var(--color-slate-400);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.copyright {
+  margin: 0;
+}
+
+.footer-legal-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-legal-links a {
+  color: var(--color-slate-500);
   text-decoration: none;
-  transition: color var(--transition-fast);
 }
 
-.footer-bottom a:hover {
-  color: #ffffff;
+.footer-legal-links a:hover {
+  color: var(--color-slate-800);
 }
 
-@media (max-width: 840px) {
+.sep {
+  color: var(--color-slate-300);
+}
+
+@media (max-width: 900px) {
   .footer-main {
     grid-template-columns: 1fr 1fr;
     gap: 32px;
   }
-  .footer-brand {
-    grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+  .footer-main {
+    grid-template-columns: 1fr;
+    gap: 28px;
   }
   .footer-bottom {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
   }
 }

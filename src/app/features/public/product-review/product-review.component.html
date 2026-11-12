@@ -1,124 +1,197 @@
 <app-site-header></app-site-header>
 
 <main class="review-page" *ngIf="!loading && review">
-  <div class="product-banner">
-    <div>
-      <span class="kicker">PRODUCT EVALUATION & AUTHENTICITY ANALYSIS</span>
-      <h1>{{ review.headline }}</h1>
-      <p class="product-meta">
-        Product: <b>{{ review.productName }}</b> · Category: <b>{{ review.category }}</b> · Author: <b>{{ review.author }}</b>
-      </p>
+  <div class="review-container">
+    <!-- Breadcrumb -->
+    <div class="review-breadcrumb">
+      <a routerLink="/search">← Back to Reviews</a>
+      <span class="sep">/</span>
+      <span class="category-text">{{ review.category }}</span>
+      <span class="sep">/</span>
+      <span class="product-text">{{ review.productName }}</span>
     </div>
-    <div class="banner-score">
-      <b>⛨ {{ review.credibilityScore }} / 100</b>
-      <span>AI Credibility Score</span>
-    </div>
-  </div>
 
-  <div class="review-grid">
-    <article class="review-main">
-      <div class="review-card-header">
-        <div class="author-info">
-          <div class="avatar">{{ review.author.substring(0, 2).toUpperCase() }}</div>
-          <div>
-            <h3>{{ review.author }}</h3>
-            <small>Submitted {{ review.createdAt | date:'medium' }}</small>
-          </div>
-        </div>
-        <div class="rating-box">
-          <span class="stars">★ {{ review.ratingValue }} / 5</span>
+    <!-- Product Review Header Banner -->
+    <div class="product-banner-card">
+      <div class="banner-content">
+        <span class="kicker">AUTHENTICITY VERIFIED EVALUATION</span>
+        <h1 class="review-headline">{{ review.headline }}</h1>
+        <div class="banner-meta-row">
+          <span>Product: <b>{{ review.productName }}</b></span>
+          <span class="dot">•</span>
+          <span>Category: <b>{{ review.category }}</b></span>
+          <span class="dot">•</span>
+          <span>Author: <b>{{ review.author }}</b></span>
         </div>
       </div>
 
-      <div class="review-body">
-        <p>{{ review.reviewText }}</p>
+      <div class="banner-score-box" [class.verified-box]="review.credibilityScore >= 80">
+        <div class="score-digit">⛨ {{ review.credibilityScore }}</div>
+        <small>AI Credibility Index / 100</small>
       </div>
+    </div>
 
-      <div class="review-actions">
-        <button class="button button-primary" (click)="markHelpful()">
-          👍 Helpful ({{ review.helpfulVoteCount }})
-        </button>
-        <button class="button button-light" (click)="showReportModal = true">
-          🚩 Report Suspicious Review
-        </button>
-      </div>
-
-      <!-- Comments Section -->
-      <section class="comments-section">
-        <h2>Community Comments ({{ comments.length }})</h2>
-
-        <div class="comment-list" *ngIf="comments.length > 0">
-          <div class="comment-card" *ngFor="let c of comments">
-            <div class="comment-meta">
-              <b>Member</b> <small>• {{ c.createdAt | date:'short' }}</small>
+    <!-- 2-Column Grid -->
+    <div class="review-content-grid">
+      <!-- Main Content Column -->
+      <article class="review-primary-card">
+        <div class="reviewer-header">
+          <div class="reviewer-meta">
+            <div class="reviewer-avatar">
+              {{ (review.author || 'U').substring(0, 2).toUpperCase() }}
             </div>
-            <p>{{ c.commentText }}</p>
+            <div>
+              <h3>{{ review.author }}</h3>
+              <small>Submitted on {{ review.createdAt | date:'medium' }}</small>
+            </div>
+          </div>
+
+          <div class="rating-display-pill">
+            <span class="stars-gold">★</span>
+            <b>{{ review.ratingValue }} / 5 Stars</b>
           </div>
         </div>
 
-        <div class="no-comments" *ngIf="comments.length === 0">
-          <p>No comments yet. Be the first to share your thoughts!</p>
+        <div class="review-narrative">
+          <p>{{ review.reviewText }}</p>
         </div>
 
-        <div class="add-comment" *ngIf="auth.isAuthenticated()">
-          <textarea [(ngModel)]="newCommentText" placeholder="Add your constructive comment or observation..." rows="3"></textarea>
-          <p class="form-error" *ngIf="commentError">{{ commentError }}</p>
-          <button class="button button-primary" (click)="submitComment()" [disabled]="submittingComment">
-            {{ submittingComment ? 'Posting...' : 'Post Comment' }}
+        <!-- Review Reaction Actions -->
+        <div class="review-interaction-bar">
+          <button class="button button-light helpful-btn" (click)="markHelpful()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+            </svg>
+            <span>Helpful ({{ review.helpfulVoteCount }})</span>
+          </button>
+
+          <button class="button button-ghost report-btn" (click)="showReportModal = true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+              <line x1="4" y1="22" x2="4" y2="15"></line>
+            </svg>
+            <span>Report Suspicious Review</span>
           </button>
         </div>
-        <div class="signin-prompt" *ngIf="!auth.isAuthenticated()">
-          <p><a routerLink="/sign-in">Sign in</a> to leave a comment on this review.</p>
-        </div>
-      </section>
-    </article>
 
-    <!-- Sidebar AI Metrics -->
-    <aside class="ai-breakdown">
-      <div class="panel-card">
-        <h3>⛨ Authenticity Breakdown</h3>
-        <div class="metric-row">
-          <span>Authenticity Status:</span>
-          <b class="badge-status">{{ review.authenticityStatus }}</b>
+        <!-- Community Comments -->
+        <section class="comments-section scroll-reveal">
+          <div class="comments-header">
+            <h3>Community Comments ({{ comments.length }})</h3>
+            <p class="comments-sub">Constructive feedback, follow-up questions, and observations.</p>
+          </div>
+
+          <div class="comments-list" *ngIf="comments.length > 0">
+            <div class="comment-bubble" *ngFor="let c of comments">
+              <div class="comment-top">
+                <span class="commenter-tag">Community Member</span>
+                <span class="comment-date">{{ c.createdAt | date:'short' }}</span>
+              </div>
+              <p class="comment-body">{{ c.commentText }}</p>
+            </div>
+          </div>
+
+          <div class="empty-state" *ngIf="comments.length === 0">
+            <p>No community comments yet. Share your experience or question below.</p>
+          </div>
+
+          <!-- Add Comment Form -->
+          <div class="add-comment-card" *ngIf="auth.isAuthenticated()">
+            <h4>Leave a Community Comment</h4>
+            <textarea [(ngModel)]="newCommentText" placeholder="Add your constructive observation or ask a question about this evaluation..." rows="3"></textarea>
+            <p class="form-error" *ngIf="commentError">{{ commentError }}</p>
+            <button class="button button-primary" (click)="submitComment()" [disabled]="submittingComment">
+              <span>{{ submittingComment ? 'Posting...' : 'Post Comment' }}</span>
+            </button>
+          </div>
+
+          <div class="login-to-comment-card" *ngIf="!auth.isAuthenticated()">
+            <p><a routerLink="/sign-in">Sign in</a> to participate in the community discussion on this review.</p>
+          </div>
+        </section>
+      </article>
+
+      <!-- Sidebar: AI Authenticity Analysis -->
+      <aside class="ai-analysis-sidebar scroll-reveal reveal-right">
+        <div class="portal-card">
+          <div class="sidebar-card-title">
+            <div class="ai-icon">⛨</div>
+            <h3>Authenticity Analysis</h3>
+          </div>
+          <p class="sidebar-card-sub">Algorithmic metrics evaluating linguistic depth and coordinated behavior.</p>
+
+          <div class="analysis-metric-row">
+            <span>Authenticity Status:</span>
+            <span class="status-badge" [class.verified]="review.authenticityStatus==='VERIFIED'">
+              {{ review.authenticityStatus }}
+            </span>
+          </div>
+
+          <div class="analysis-metric-row">
+            <span>AI Credibility Score:</span>
+            <b class="score-highlight">{{ review.credibilityScore }} / 100</b>
+          </div>
+
+          <div class="analysis-metric-row">
+            <span>Sentiment Detection:</span>
+            <span class="sentiment-chip">{{ review.sentiment || 'BALANCED' }}</span>
+          </div>
+
+          <div class="analysis-metric-row">
+            <span>Moderation Status:</span>
+            <span class="status-badge" [class.published]="review.status==='PUBLISHED'">
+              {{ review.status }}
+            </span>
+          </div>
+
+          <div class="ai-guarantee-note">
+            <b>✓ Multi-Factor Verification</b>
+            <p>Evaluated for lexical repetition, burst submission timing, and organic sentiment cadence.</p>
+          </div>
         </div>
-        <div class="metric-row">
-          <span>AI Credibility Score:</span>
-          <b>{{ review.credibilityScore }} / 100</b>
-        </div>
-        <div class="metric-row">
-          <span>Sentiment Detection:</span>
-          <b>{{ review.sentiment }}</b>
-        </div>
-        <div class="metric-row">
-          <span>Review Status:</span>
-          <b>{{ review.status }}</b>
-        </div>
-      </div>
-    </aside>
+      </aside>
+    </div>
   </div>
 
-  <!-- Report Modal -->
-  <div class="modal-backdrop" *ngIf="showReportModal">
-    <div class="modal-card">
-      <h2>Report Review for Moderation</h2>
-      <p>Please describe why you believe this review is fake, promotional spam, or inappropriate:</p>
-      <textarea [(ngModel)]="reportReason" rows="4" placeholder="Enter reason for report..."></textarea>
-      <p *ngIf="reportSuccess" class="form-success">Report submitted successfully to moderators.</p>
-      <div class="modal-actions">
-        <button class="button button-primary" (click)="submitReport()" [disabled]="reporting">Submit Report</button>
+  <!-- Modern Report Modal -->
+  <div class="modal-overlay" *ngIf="showReportModal" (click)="showReportModal = false">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Report Suspicious Review</h3>
+        <button class="modal-close" (click)="showReportModal = false">✕</button>
+      </div>
+
+      <div class="modal-body" *ngIf="!reportSuccess">
+        <p>Please provide details on why you suspect this review violates community truth integrity (e.g. paid spam, bot submission, misleading claims).</p>
+        <div class="form-group">
+          <label>Reason for Flag *</label>
+          <textarea [(ngModel)]="reportReason" rows="4" placeholder="Describe the suspected policy violation..."></textarea>
+        </div>
+      </div>
+
+      <div class="alert alert-success" *ngIf="reportSuccess">
+        <span>Report submitted successfully. Our administrative moderation team will investigate.</span>
+      </div>
+
+      <div class="modal-footer" *ngIf="!reportSuccess">
         <button class="button button-light" (click)="showReportModal = false">Cancel</button>
+        <button class="button button-danger" (click)="submitReport()" [disabled]="reporting">
+          <span>{{ reporting ? 'Submitting...' : 'Submit Report' }}</span>
+        </button>
       </div>
     </div>
   </div>
 </main>
 
 <div class="empty-state" *ngIf="loading">
-  <p>Loading evaluation details...</p>
+  <p>Loading review evaluation details...</p>
 </div>
 
 <div class="empty-state" *ngIf="!loading && !review">
-  <p>{{ error || 'Review not found.' }}</p>
-  <a routerLink="/search" class="button button-primary">Back to Search</a>
+  <div class="empty-icon">⚠️</div>
+  <h3>Review Not Found</h3>
+  <p>{{ error || 'The requested evaluation does not exist or has been removed.' }}</p>
+  <a routerLink="/search" class="button button-primary">Browse All Reviews</a>
 </div>
 
 <app-site-footer></app-site-footer>

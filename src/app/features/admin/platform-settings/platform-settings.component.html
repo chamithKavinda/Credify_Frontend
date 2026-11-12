@@ -1,1 +1,145 @@
-<span class="kicker">ADMIN CONSOLE · SYSTEM CONFIGURATION</span><h1 class="panel-title">Platform Settings</h1><p class="panel-lead">Configure review-analysis thresholds and moderation workflow preferences.</p><p class="saved-message" *ngIf="saveMessage">{{ saveMessage }}</p><div class="settings-columns"><section class="settings-card"><h2>AI review heuristics</h2><p>These sample values control when a review is sent for further inspection.</p><label>Burst threshold (reviews)<input type="number" [(ngModel)]="burstThreshold" min="1"></label><label>Time window (minutes)<input type="number" [(ngModel)]="timeWindow" min="1"></label><label>Semantic duplicate threshold (%)<input type="number" [(ngModel)]="duplicateThreshold" min="0" max="100"></label></section><section class="settings-card"><h2>Moderation workflow</h2><p>Choose how flagged reviews are handled.</p><label class="toggle-row">Require human review for flagged items <input type="checkbox" [(ngModel)]="requireHumanReview"></label><div class="warning-note">Changes should be reviewed and recorded before applying production policy.</div><button class="secondary-action">View policy audit history</button></section><section class="settings-card security-card"><h2>System health</h2><div class="health-row"><span>Review analysis engine</span><b>Online</b></div><div class="health-row"><span>Authentication provider</span><b>Connected in demo mode</b></div><div class="health-row"><span>Last configuration update</span><b>Not connected</b></div></section></div><button class="primary-action" (click)="save()">Save Platform Settings</button>
+<section class="portal-header">
+  <div>
+    <span class="kicker">SYSTEM CONFIGURATION</span>
+    <h1>Platform & AI Engine Settings</h1>
+    <p>Fine-tune automated authenticity heuristics, moderation sensitivity thresholds, and workflow governance.</p>
+  </div>
+  <button class="button button-primary" (click)="save()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+      <polyline points="7 3 7 8 15 8"></polyline>
+    </svg>
+    <span>Save Changes</span>
+  </button>
+</section>
+
+<!-- Save Alert -->
+<div class="alert alert-success" *ngIf="saveMessage">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </svg>
+  <span>{{ saveMessage }}</span>
+</div>
+
+<div class="settings-grid">
+  <!-- Card 1: AI Heuristics -->
+  <section class="portal-card">
+    <div class="card-title-row">
+      <div class="icon-chip primary-chip">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+          <path d="M2 12h20"></path>
+        </svg>
+      </div>
+      <div>
+        <h2>AI Heuristic Thresholds</h2>
+        <p class="card-sub">Statistical thresholds that trigger deeper anomaly audits.</p>
+      </div>
+    </div>
+
+    <div class="settings-form">
+      <div class="form-group">
+        <label>Burst Velocity Limit (Reviews per window)</label>
+        <input type="number" [(ngModel)]="burstThreshold" min="1" max="100">
+        <small>Flags rapid spikes of reviews posted to the same product.</small>
+      </div>
+
+      <div class="form-group">
+        <label>Burst Window Window (Minutes)</label>
+        <input type="number" [(ngModel)]="timeWindow" min="5" max="1440">
+        <small>Time interval checked for sudden coordinated submission bursts.</small>
+      </div>
+
+      <div class="form-group">
+        <label>Semantic Duplicate Threshold (%)</label>
+        <input type="number" [(ngModel)]="duplicateThreshold" min="10" max="100">
+        <small>Triggers flag if content similarity exceeds this percentage.</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 2: Moderation Governance -->
+  <section class="portal-card">
+    <div class="card-title-row">
+      <div class="icon-chip warning-chip">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+      </div>
+      <div>
+        <h2>Moderation Governance</h2>
+        <p class="card-sub">Control automated approvals vs human moderator sign-off.</p>
+      </div>
+    </div>
+
+    <div class="settings-toggles">
+      <label class="toggle-card">
+        <div class="toggle-info">
+          <b>Mandatory Human Verification</b>
+          <p>Require human review before publishing any submission with score under 75.</p>
+        </div>
+        <input type="checkbox" [(ngModel)]="requireHumanReview" class="modern-checkbox">
+      </label>
+
+      <div class="info-callout">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <span>Policy revisions are logged to the cryptographic administrative audit trail.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 3: Engine Health & Connectivity -->
+  <section class="portal-card full-width-card">
+    <div class="card-title-row">
+      <div class="icon-chip success-chip">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+      </div>
+      <div>
+        <h2>Engine Health & Operational Status</h2>
+        <p class="card-sub">Real-time status of verification subsystems and background workers.</p>
+      </div>
+    </div>
+
+    <div class="health-grid">
+      <div class="health-item">
+        <div class="health-meta">
+          <span class="health-name">Linguistic AI Scanner</span>
+          <small>Natural Language Model v2.4</small>
+        </div>
+        <span class="status-badge status-active">Online · 99.9%</span>
+      </div>
+
+      <div class="health-item">
+        <div class="health-meta">
+          <span class="health-name">Temporal Burst Detector</span>
+          <small>Sliding Window Evaluator</small>
+        </div>
+        <span class="status-badge status-active">Active · 12ms</span>
+      </div>
+
+      <div class="health-item">
+        <div class="health-meta">
+          <span class="health-name">Reputation Scoring Engine</span>
+          <small>Contributor Trust Ledger</small>
+        </div>
+        <span class="status-badge status-active">Healthy</span>
+      </div>
+
+      <div class="health-item">
+        <div class="health-meta">
+          <span class="health-name">Database Sync</span>
+          <small>PostgreSQL / Spring Data REST</small>
+        </div>
+        <span class="status-badge status-active">Connected</span>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,34 +1,115 @@
-<aside class="sidebar-nav admin-theme">
+<aside class="sidebar-nav">
   <div class="sidebar-header">
     <a class="brand" routerLink="/">
-      <span class="brand-mark">✓</span>
-      <span>Credify</span>
+      <span class="brand-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </span>
+      <div class="brand-text">
+        <span class="brand-name">Credify</span>
+        <span class="portal-badge">Admin Console</span>
+      </div>
     </a>
-    <span class="portal-badge admin-badge">Admin Portal</span>
   </div>
+
+  <div class="nav-section-label">MANAGEMENT & AUDIT</div>
+
   <nav class="nav-links">
-    <a routerLink="/admin/reviews" routerLinkActive="active">
-      <span class="nav-icon">📊</span>
-      <span>Dashboard</span>
+    <a routerLink="/admin/reviews" routerLinkActive="active" title="Review Moderation Queue">
+      <span class="nav-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="9"></rect>
+          <rect x="14" y="3" width="7" height="5"></rect>
+          <rect x="14" y="12" width="7" height="9"></rect>
+          <rect x="3" y="16" width="7" height="5"></rect>
+        </svg>
+      </span>
+      <span class="nav-label">Moderation Queue</span>
     </a>
-    <a routerLink="/admin/reports" routerLinkActive="active">
-      <span class="nav-icon">🚩</span>
-      <span>Flagged Reports</span>
+
+    <a routerLink="/admin/reports" routerLinkActive="active" title="Flagged Reports">
+      <span class="nav-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+          <line x1="4" y1="22" x2="4" y2="15"></line>
+        </svg>
+      </span>
+      <span class="nav-label">Flagged Reports</span>
     </a>
-    <a routerLink="/admin/users" routerLinkActive="active">
-      <span class="nav-icon">👥</span>
-      <span>User Accounts</span>
+
+    <a routerLink="/admin/users" routerLinkActive="active" title="User Accounts">
+      <span class="nav-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </span>
+      <span class="nav-label">User Accounts</span>
     </a>
-    <a routerLink="/admin/badges" routerLinkActive="active">
-      <span class="nav-icon">🏅</span>
-      <span>Badge Management</span>
+
+    <a routerLink="/admin/badges" routerLinkActive="active" title="Badge Rules & Management">
+      <span class="nav-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="6"></circle>
+          <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+        </svg>
+      </span>
+      <span class="nav-label">Badge System</span>
     </a>
-    <a routerLink="/admin/explore" routerLinkActive="active">
-      <span class="nav-icon">🔍</span>
-      <span>Explore All Reviews</span>
+
+    <a routerLink="/admin/settings" routerLinkActive="active" title="Platform & AI Settings">
+      <span class="nav-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </span>
+      <span class="nav-label">Platform Settings</span>
     </a>
   </nav>
+
+  <div class="nav-section-label">PUBLIC DISCOVERY</div>
+
+  <nav class="nav-links sub-nav">
+    <a routerLink="/admin/explore" routerLinkActive="active" title="Explore All Reviews">
+      <span class="nav-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </span>
+      <span class="nav-label">Public Reviews</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-spacer"></div>
+
+  <!-- Admin User Card -->
+  <div class="admin-profile-card">
+    <div class="admin-avatar">{{ initials }}</div>
+    <div class="admin-info">
+      <span class="admin-name">{{ auth.getUserFullName() }}</span>
+      <span class="admin-role-tag">Super Admin</span>
+    </div>
+  </div>
+
   <div class="sidebar-footer">
-    <a routerLink="/" class="back-home">← Back to Main Site</a>
+    <a routerLink="/" class="back-home">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>Back to Main Site</span>
+    </a>
+    <button type="button" class="sign-out-btn" (click)="logout()" title="Sign out">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+        <polyline points="16 17 21 12 16 7"></polyline>
+        <line x1="21" y1="12" x2="9" y2="12"></line>
+      </svg>
+    </button>
   </div>
 </aside>

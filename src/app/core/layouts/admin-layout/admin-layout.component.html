@@ -1,6 +1,33 @@
 <div class="portal-layout admin-layout">
   <app-admin-sidebar></app-admin-sidebar>
-  <main class="portal-content">
-    <router-outlet></router-outlet>
-  </main>
+  <div class="portal-main-area">
+    <header class="admin-topbar">
+      <div class="topbar-left">
+        <span class="system-status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-text">Integrity Engine <b>Active</b></span>
+        </span>
+      </div>
+      <div class="topbar-right">
+        <a routerLink="/admin/reviews" class="topbar-action-pill" routerLinkActive="pill-active">
+          Queue
+        </a>
+        <a routerLink="/admin/reports" class="topbar-action-pill" routerLinkActive="pill-active">
+          Reports
+        </a>
+        <a routerLink="/admin/users" class="topbar-action-pill" routerLinkActive="pill-active">
+          Users
+        </a>
+        <a routerLink="/search" class="topbar-site-link">
+          <span>Search Public Site</span> ↗
+        </a>
+      </div>
+    </header>
+
+    <main class="portal-content">
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
 </div>

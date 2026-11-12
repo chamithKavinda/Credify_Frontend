@@ -1,27 +1,130 @@
-<span class="kicker">REVIEWER WORKSPACE · ACCOUNT PREFERENCES</span>
-<h1 class="panel-title">Settings</h1>
-<p class="panel-lead">Manage your account details, privacy and notification preferences.</p>
-<p class="saved-message" *ngIf="saved">Your settings were saved for this demo.</p>
-<div class="settings-columns">
-  <section class="settings-card">
-    <h2>Profile information</h2>
-    <p>These details control how your contributor profile appears.</p>
-    <label>Display name<input [(ngModel)]="displayName" name="displayName"></label>
-    <label>Email address<input [(ngModel)]="email" name="email" type="email" disabled></label>
-    <label class="toggle-row">Show my profile publicly <input type="checkbox" [(ngModel)]="publicProfile" name="publicProfile"></label>
+<section class="portal-header">
+  <div>
+    <span class="kicker">PREFERENCES & PRIVACY</span>
+    <h1>Account Settings</h1>
+    <p>Manage your public visibility, email notification subscriptions, and security preferences.</p>
+  </div>
+  <button class="button button-primary" (click)="save()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+      <polyline points="7 3 7 8 15 8"></polyline>
+    </svg>
+    <span>Save Settings</span>
+  </button>
+</section>
+
+<!-- Save Alert -->
+<div class="alert alert-success" *ngIf="saved">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </svg>
+  <span>Your account preferences have been saved successfully!</span>
+</div>
+
+<div class="settings-grid">
+  <!-- Card 1: Profile Visibility -->
+  <section class="portal-card">
+    <div class="card-title-row">
+      <div class="icon-chip primary-chip">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
+      <div>
+        <h2>Profile Visibility</h2>
+        <p class="card-sub">Control how other community members see your contributions.</p>
+      </div>
+    </div>
+
+    <div class="settings-form">
+      <div class="form-group">
+        <label>Contributor Display Name</label>
+        <input type="text" [(ngModel)]="displayName" name="displayName">
+      </div>
+
+      <div class="form-group">
+        <label>Primary Account Email</label>
+        <input type="email" [value]="email" disabled readonly>
+      </div>
+
+      <label class="toggle-card">
+        <div class="toggle-info">
+          <b>Public Contributor Profile</b>
+          <p>Allow other consumers to view your published reviews and earned badges.</p>
+        </div>
+        <input type="checkbox" [(ngModel)]="publicProfile" name="publicProfile" class="modern-checkbox">
+      </label>
+    </div>
   </section>
-  <section class="settings-card">
-    <h2>Notifications</h2>
-    <p>Choose which Credify updates you want to receive.</p>
-    <label class="toggle-row">Product alerts <input type="checkbox" [(ngModel)]="productAlerts" name="productAlerts"></label>
-    <label class="toggle-row">Review status updates <input type="checkbox" [(ngModel)]="reviewUpdates" name="reviewUpdates"></label>
-    <label class="toggle-row">Security notices <input type="checkbox" [(ngModel)]="securityAlerts" name="securityAlerts"></label>
+
+  <!-- Card 2: Notifications -->
+  <section class="portal-card">
+    <div class="card-title-row">
+      <div class="icon-chip warning-chip">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+      </div>
+      <div>
+        <h2>Notification Preferences</h2>
+        <p class="card-sub">Choose which automated emails and updates you receive.</p>
+      </div>
+    </div>
+
+    <div class="settings-toggles">
+      <label class="toggle-card">
+        <div class="toggle-info">
+          <b>Review Moderation Alerts</b>
+          <p>Instant notice when your review is verified and published.</p>
+        </div>
+        <input type="checkbox" [(ngModel)]="reviewUpdates" name="reviewUpdates" class="modern-checkbox">
+      </label>
+
+      <label class="toggle-card">
+        <div class="toggle-info">
+          <b>Helpful Reaction Notices</b>
+          <p>Weekly digest of community votes and comments on your reviews.</p>
+        </div>
+        <input type="checkbox" [(ngModel)]="productAlerts" name="productAlerts" class="modern-checkbox">
+      </label>
+
+      <label class="toggle-card">
+        <div class="toggle-info">
+          <b>Security & Login Notices</b>
+          <p>Critical notifications regarding unrecognized logins or password resets.</p>
+        </div>
+        <input type="checkbox" [(ngModel)]="securityAlerts" name="securityAlerts" class="modern-checkbox">
+      </label>
+    </div>
   </section>
-  <section class="settings-card security-card">
-    <h2>Security</h2>
-    <p>Update your password and review active sign-in sessions.</p>
-    <button type="button" class="secondary-action">Change password</button>
-    <button type="button" class="secondary-action">View active sessions</button>
+
+  <!-- Card 3: Security & Sessions -->
+  <section class="portal-card full-width-card">
+    <div class="card-title-row">
+      <div class="icon-chip success-chip">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" radius="2" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+      <div>
+        <h2>Security & Authentication</h2>
+        <p class="card-sub">Manage active authorization tokens and password credentials.</p>
+      </div>
+    </div>
+
+    <div class="security-actions-row">
+      <div class="security-status-text">
+        <b>Two-Factor Authentication: Active</b>
+        <p>Your session is signed with JSON Web Token (JWT) integrity encryption.</p>
+      </div>
+      <div class="security-btn-group">
+        <button type="button" class="button button-light" (click)="save()">Change Password</button>
+        <button type="button" class="button button-light" (click)="save()">View Active Sessions</button>
+      </div>
+    </div>
   </section>
 </div>
-<button class="primary-action" (click)="save()">Save Settings</button>

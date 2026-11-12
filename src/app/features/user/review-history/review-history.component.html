@@ -1,1 +1,101 @@
-<p>review-history works!</p>
+<section class="portal-header">
+  <div>
+    <span class="kicker">MY EVALUATIONS</span>
+    <h1>My Evaluation History</h1>
+    <p>Browse all your submitted consumer evaluations, track publication status, and view community feedback.</p>
+  </div>
+  <a routerLink="/user/submit-review" class="button button-primary">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+    <span>Submit New Review</span>
+  </a>
+</section>
+
+<div class="portal-card">
+  <!-- Toolbar -->
+  <div class="history-toolbar">
+    <div class="toolbar-search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search your reviews by product or title...">
+    </div>
+
+    <div class="filter-pills">
+      <button class="pill-btn" [class.active]="statusFilter==='ALL'" (click)="statusFilter='ALL'">
+        All ({{ reviews.length }})
+      </button>
+      <button class="pill-btn" [class.active]="statusFilter==='PUBLISHED'" (click)="statusFilter='PUBLISHED'">
+        Published
+      </button>
+      <button class="pill-btn" [class.active]="statusFilter==='PENDING'" (click)="statusFilter='PENDING'">
+        Pending
+      </button>
+    </div>
+  </div>
+
+  <!-- Review Table -->
+  <div class="table-responsive" *ngIf="!loading && filteredReviews.length > 0">
+    <table class="portal-table">
+      <thead>
+        <tr>
+          <th>Product & Headline</th>
+          <th>Rating</th>
+          <th>AI Credibility</th>
+          <th>Status</th>
+          <th>Helpful Votes</th>
+          <th>Submitted On</th>
+          <th style="text-align: right;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of filteredReviews">
+          <td>
+            <div class="review-title-group">
+              <span class="product-badge">{{ r.productName }} ({{ r.category }})</span>
+              <a [routerLink]="['/reviews', r.id]" class="review-headline">{{ r.headline }}</a>
+            </div>
+          </td>
+          <td>
+            <span class="rating-badge">★ {{ r.ratingValue }} / 5</span>
+          </td>
+          <td>
+            <span class="cred-score-pill" [class.verified]="r.credibilityScore >= 80">
+              ⛨ {{ r.credibilityScore }} / 100
+            </span>
+          </td>
+          <td>
+            <span class="status-badge" [class.published]="r.status==='PUBLISHED'" [class.pending]="r.status==='PENDING'">
+              {{ r.status }}
+            </span>
+          </td>
+          <td>
+            <span class="helpful-tag">👍 {{ r.helpfulVoteCount }}</span>
+          </td>
+          <td>
+            <span class="date-tag">{{ r.createdAt | date:'mediumDate' }}</span>
+          </td>
+          <td style="text-align: right;">
+            <a [routerLink]="['/reviews', r.id]" class="button button-light button-sm">
+              <span>View Review →</span>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && filteredReviews.length === 0">
+    <div class="empty-icon">📝</div>
+    <h3>No Reviews Found</h3>
+    <p>You haven't submitted any reviews matching this criteria yet.</p>
+    <a routerLink="/user/submit-review" class="button button-primary">+ Submit First Review</a>
+  </div>
+
+  <div class="empty-state" *ngIf="loading">
+    <p>Loading your evaluation records...</p>
+  </div>
+</div>

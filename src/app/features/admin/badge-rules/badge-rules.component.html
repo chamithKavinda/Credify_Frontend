@@ -1,32 +1,60 @@
 <section class="portal-header">
   <div>
-    <h1>Badge System & Reward Configuration</h1>
-    <p>Configure reputation badges awarded to trusted contributors and helpful reviewers.</p>
+    <span class="kicker">REPUTATION & GAMIFICATION</span>
+    <h1>Badge System & Rewards</h1>
+    <p>Configure automated and manual reputation badges awarded to authentic contributors and verified reviewers.</p>
   </div>
 </section>
 
 <div class="portal-grid">
-  <!-- Badge List -->
+  <!-- Left Column: Active Badges -->
   <section class="portal-card">
-    <h2>Active System Badges ({{ badges.length }})</h2>
+    <div class="badges-card-header">
+      <div>
+        <h2>Active System Badges</h2>
+        <p class="toolbar-sub">Currently configured badges available in the platform.</p>
+      </div>
+      <span class="count-badge">{{ badges.length }} active</span>
+    </div>
+
     <div class="badge-list" *ngIf="!loading && badges.length > 0">
-      <div class="badge-item" *ngFor="let b of badges">
-        <div class="badge-icon">🎖️</div>
-        <div>
-          <b>{{ b.badgeName }}</b>
+      <div class="badge-item-modern" *ngFor="let b of badges">
+        <div class="badge-icon-box">🎖️</div>
+        <div class="badge-details">
+          <div class="badge-top-line">
+            <b>{{ b.badgeName }}</b>
+            <span class="criteria-pill">Criteria Verified</span>
+          </div>
           <p>{{ b.description }}</p>
-          <small><b>Earning Criteria:</b> {{ b.earningCriteria }}</small>
+          <div class="badge-criteria-box">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 14 14"></polyline>
+            </svg>
+            <span><strong>Requirement:</strong> {{ b.earningCriteria }}</span>
+          </div>
         </div>
       </div>
     </div>
+
+    <div class="empty-state" *ngIf="!loading && badges.length === 0">
+      <div class="empty-icon">🎖️</div>
+      <h3>No Badges Created</h3>
+      <p>Create your first reputation badge using the form on the right.</p>
+    </div>
+
     <div class="empty-state" *ngIf="loading">
-      <p>Loading badges...</p>
+      <p>Loading active badges...</p>
     </div>
   </section>
 
-  <!-- Create Badge Form -->
-  <aside class="portal-card">
-    <h2>Create New Badge</h2>
+  <!-- Right Column: Create Badge Form -->
+  <aside class="portal-card form-card">
+    <div class="form-header">
+      <h2>Create New Badge</h2>
+      <p class="toolbar-sub">Add a new milestone award to the reputation engine.</p>
+    </div>
+
     <form (ngSubmit)="createBadge()">
       <div class="form-group">
         <label>Badge Name *</label>
@@ -35,19 +63,29 @@
 
       <div class="form-group">
         <label>Description *</label>
-        <textarea [(ngModel)]="description" name="description" rows="3" placeholder="Brief description of the badge award..." required></textarea>
+        <textarea [(ngModel)]="description" name="description" rows="3" placeholder="Explain the achievement and value of this badge..." required></textarea>
       </div>
 
       <div class="form-group">
         <label>Earning Criteria *</label>
         <input type="text" [(ngModel)]="earningCriteria" name="earningCriteria" placeholder="e.g. Awarded for receiving 25+ helpful votes" required>
+        <small>Clear conditions required for automatic or manual award.</small>
       </div>
 
-      <p class="form-success" *ngIf="message">{{ message }}</p>
-      <p class="form-error" *ngIf="error">{{ error }}</p>
+      <div class="alert alert-success" *ngIf="message">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>{{ message }}</span>
+      </div>
 
-      <button type="submit" class="button button-primary" [disabled]="submitting">
-        {{ submitting ? 'Creating...' : '+ Create Badge' }}
+      <div class="alert alert-danger" *ngIf="error">
+        <span>{{ error }}</span>
+      </div>
+
+      <button type="submit" class="button button-primary button-full" [disabled]="submitting">
+        <span *ngIf="!submitting">+ Create Badge</span>
+        <span *ngIf="submitting">Saving Badge...</span>
       </button>
     </form>
   </aside>

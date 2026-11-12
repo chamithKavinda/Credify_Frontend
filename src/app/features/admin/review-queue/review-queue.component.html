@@ -1,72 +1,192 @@
 <section class="portal-header">
   <div>
-    <h1>Admin Review Moderation Queue</h1>
-    <p>Inspect incoming consumer reviews flagged for review or pending automated analysis.</p>
+    <span class="kicker">CONTENT INTEGRITY & VERIFICATION</span>
+    <h1>Admin Moderation Queue</h1>
+    <p>Inspect incoming consumer reviews, verify automated authenticity diagnostics, and govern platform trust.</p>
   </div>
+  <button class="button button-light button-sm" (click)="loadData()" [disabled]="loading">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+    </svg>
+    <span>Refresh Queue</span>
+  </button>
 </section>
 
+<!-- Overview Stat Cards -->
 <div class="stats-row" *ngIf="stats">
   <div class="stat-card">
-    <small>Total Users</small>
-    <b>{{ stats.totalUsers }}</b>
+    <div class="stat-icon-wrapper user-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <small>Total Users</small>
+      <b>{{ stats.totalUsers }}</b>
+    </div>
   </div>
+
   <div class="stat-card">
-    <small>Total Reviews</small>
-    <b>{{ stats.totalReviews }}</b>
+    <div class="stat-icon-wrapper review-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <small>Total Reviews</small>
+      <b>{{ stats.totalReviews }}</b>
+    </div>
   </div>
+
   <div class="stat-card">
-    <small>Published Reviews</small>
-    <b>{{ stats.publishedReviews }}</b>
+    <div class="stat-icon-wrapper published-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <small>Published</small>
+      <b>{{ stats.publishedReviews }}</b>
+    </div>
   </div>
-  <div class="stat-card">
-    <small>Pending Moderation</small>
-    <b>{{ stats.pendingReviews }}</b>
+
+  <div class="stat-card highlight-card">
+    <div class="stat-icon-wrapper pending-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <small>Pending Moderation</small>
+      <b class="highlight-text">{{ stats.pendingReviews }}</b>
+    </div>
   </div>
+
   <div class="stat-card">
-    <small>Open Reports</small>
-    <b>{{ stats.openReports }}</b>
+    <div class="stat-icon-wrapper report-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+        <line x1="4" y1="22" x2="4" y2="15"></line>
+      </svg>
+    </div>
+    <div class="stat-content">
+      <small>Open Reports</small>
+      <b>{{ stats.openReports }}</b>
+    </div>
   </div>
 </div>
 
-<p class="form-success" *ngIf="actionMessage">{{ actionMessage }}</p>
+<!-- Alert Banner -->
+<div class="alert alert-success" *ngIf="actionMessage">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </svg>
+  <span>{{ actionMessage }}</span>
+</div>
 
+<!-- Main Queue Card -->
 <div class="portal-card">
-  <h2>Pending Review Submissions ({{ pendingReviews.length }})</h2>
+  <div class="queue-toolbar">
+    <div class="toolbar-heading">
+      <h2>Pending Submissions ({{ filteredReviews.length }})</h2>
+      <p class="toolbar-sub">Review items awaiting manual approval or flagged by anomaly detection.</p>
+    </div>
 
-  <div class="queue-list" *ngIf="!loading && pendingReviews.length > 0">
-    <div class="queue-item" *ngFor="let r of pendingReviews">
-      <div class="queue-header">
-        <div>
-          <span class="status-badge pending">{{ r.status }}</span>
-          <span class="status-badge" [class.verified]="r.authenticityStatus==='VERIFIED'">AI Status: {{ r.authenticityStatus }}</span>
-          <h3>{{ r.headline }}</h3>
-          <small>Product: <b>{{ r.productName }}</b> ({{ r.category }}) · Author ID: {{ r.userId }}</small>
+    <div class="toolbar-filters">
+      <div class="search-input-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Search by product, headline...">
+      </div>
+
+      <select [(ngModel)]="selectedStatusFilter" class="filter-dropdown">
+        <option value="ALL">All AI Diagnostics</option>
+        <option value="VERIFIED">Verified Authentic</option>
+        <option value="NEEDS_REVIEW">Needs Review</option>
+        <option value="FLAGGED">Flagged Anomaly</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Queue Items -->
+  <div class="queue-list" *ngIf="!loading && filteredReviews.length > 0">
+    <div class="queue-item" *ngFor="let r of filteredReviews">
+      <div class="queue-top-row">
+        <div class="item-meta">
+          <div class="badges-row">
+            <span class="status-badge pending">
+              <span class="dot"></span> {{ r.status }}
+            </span>
+            <span class="status-badge" [ngClass]="{
+              'status-active': r.authenticityStatus === 'VERIFIED',
+              'pending': r.authenticityStatus === 'NEEDS_REVIEW',
+              'status-suspended': r.authenticityStatus === 'FLAGGED'
+            }">
+              AI Status: {{ r.authenticityStatus }}
+            </span>
+            <span class="category-pill">{{ r.category || 'General' }}</span>
+          </div>
+
+          <h3 class="review-title">{{ r.headline }}</h3>
+          <div class="review-byline">
+            Product: <strong>{{ r.productName }}</strong> · Contributor ID: <code>{{ r.userId }}</code> · Submitted {{ r.createdAt | date:'mediumDate' }}
+          </div>
         </div>
-        <div class="queue-score">
-          <b>⛨ {{ r.credibilityScore }} / 100</b>
-          <small>Credibility</small>
+
+        <div class="score-card">
+          <div class="score-number">⛨ {{ r.credibilityScore }}</div>
+          <small>Credibility / 100</small>
         </div>
       </div>
 
       <div class="queue-body">
-        <p><b>Rating:</b> ★ {{ r.ratingValue }} / 5 · <b>Sentiment:</b> {{ r.sentiment }}</p>
-        <p class="review-text">"{{ r.reviewText }}"</p>
-        <small>Submitted on {{ r.createdAt | date:'medium' }}</small>
+        <div class="metric-tags">
+          <span class="rating-tag">★ {{ r.ratingValue }} / 5 Stars</span>
+          <span class="sentiment-tag" *ngIf="r.sentiment">Sentiment: {{ r.sentiment }}</span>
+          <span class="helpful-tag">👍 {{ r.helpfulVoteCount || 0 }} Helpful Votes</span>
+        </div>
+
+        <blockquote class="review-quote">
+          “{{ r.reviewText }}”
+        </blockquote>
       </div>
 
       <div class="queue-actions">
-        <button class="button button-primary" (click)="moderate(r.id, 'PUBLISHED')">✓ Approve & Publish</button>
-        <button class="button button-light" (click)="moderate(r.id, 'HIDDEN')">👁️ Hide Review</button>
-        <button class="button button-danger" (click)="moderate(r.id, 'REMOVED')">🗑️ Remove Review</button>
+        <button class="button button-success" (click)="moderate(r.id, 'PUBLISHED')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Approve & Publish</span>
+        </button>
+        <button class="button button-light" (click)="moderate(r.id, 'HIDDEN')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+          </svg>
+          <span>Hide Review</span>
+        </button>
+        <button class="button button-danger" (click)="moderate(r.id, 'REMOVED')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span>Remove Review</span>
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="empty-state" *ngIf="!loading && pendingReviews.length === 0">
-    <p>🎉 All clear! There are no reviews currently awaiting moderation.</p>
+  <div class="empty-state" *ngIf="!loading && filteredReviews.length === 0">
+    <div class="empty-icon">✓</div>
+    <h3>Queue Clear</h3>
+    <p>There are no review submissions currently awaiting moderation matching your criteria.</p>
   </div>
 
   <div class="empty-state" *ngIf="loading">
-    <p>Loading moderation queue...</p>
+    <p>Loading moderation queue data...</p>
   </div>
 </div>

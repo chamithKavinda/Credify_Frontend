@@ -5,7 +5,6 @@ import { Review } from '../../../shared/models/review.model';
 
 @Component({
   selector: 'app-review-queue',
-  standalone: false,
   templateUrl: './review-queue.component.html',
   styleUrls: ['./review-queue.component.css']
 })
@@ -14,11 +13,27 @@ export class ReviewQueueComponent implements OnInit {
   pendingReviews: Review[] = [];
   loading = true;
   actionMessage = '';
+  searchTerm = '';
+  selectedStatusFilter = 'ALL';
 
   constructor(private adminService: AdminService) {}
 
   ngOnInit(): void {
     this.loadData();
+  }
+
+  get filteredReviews(): Review[] {
+    return this.pendingReviews.filter(r => {
+      const matchesSearch = !this.searchTerm ||
+        r.productName?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        r.headline?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        r.category?.toLowerCase().includes(this.searchTerm.toLowerCase());
+      
+      const matchesStatus = this.selectedStatusFilter === 'ALL' ||
+        r.authenticityStatus === this.selectedStatusFilter;
+
+      return matchesSearch && matchesStatus;
+    });
   }
 
   loadData(): void {
@@ -40,7 +55,7 @@ export class ReviewQueueComponent implements OnInit {
     this.actionMessage = '';
     this.adminService.moderateReview(reviewId, decision).subscribe({
       next: () => {
-        this.actionMessage = `Review status updated to ${decision}.`;
+        this.actionMessage = `Review status successfully updated to ${decision}.`;
         this.loadData();
       },
       error: (err) => {

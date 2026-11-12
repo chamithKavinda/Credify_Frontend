@@ -1,50 +1,119 @@
 <section class="portal-header">
   <div>
-    <h1>Submit a Product Review</h1>
-    <p>Share your honest experience. Reviews undergo automated AI authenticity checks and scoring.</p>
+    <span class="kicker">AUTHENTIC SUBMISSIONS</span>
+    <h1>Submit a Product Evaluation</h1>
+    <p>Share your genuine, unbiased experience. Reviews undergo transparent AI linguistic and credibility diagnostics.</p>
   </div>
 </section>
 
-<div class="portal-card">
-  <form (ngSubmit)="submit()">
-    <div class="form-group">
-      <label>Product / Service Name *</label>
-      <input type="text" [(ngModel)]="productName" name="productName" placeholder="e.g. Sony WH-1000XM5 Headphones" required>
+<div class="submit-grid">
+  <!-- Form Section -->
+  <section class="portal-card form-container">
+    <form (ngSubmit)="submit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Product or Service Name *</label>
+          <input type="text" [(ngModel)]="productName" name="productName" placeholder="e.g. Sony WH-1000XM5 Headphones" required>
+        </div>
+
+        <div class="form-group">
+          <label>Category *</label>
+          <select [(ngModel)]="category" name="category">
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Evaluation Headline / Summary *</label>
+        <input type="text" [(ngModel)]="headline" name="headline" placeholder="e.g. Superb active noise cancellation, but headband clamping feels tight" required>
+        <small>A concise summary of your key observation or takeaway.</small>
+      </div>
+
+      <!-- Interactive Star Rating Picker -->
+      <div class="form-group rating-picker-group">
+        <label>Customer Satisfaction Rating *</label>
+        <div class="star-selector-row">
+          <div class="stars-buttons">
+            <button type="button" *ngFor="let s of [1, 2, 3, 4, 5]" 
+                    class="star-btn" 
+                    [class.active]="s <= ratingValue"
+                    (click)="setRating(s)">
+              ★
+            </button>
+          </div>
+          <span class="rating-descriptor">{{ ratingDescriptions[ratingValue] }}</span>
+        </div>
+      </div>
+
+      <!-- Detailed Review Text Area -->
+      <div class="form-group">
+        <div class="label-with-counter">
+          <label>Comprehensive Evaluation & Experience *</label>
+          <span class="counter-text">{{ wordCount }} words · {{ reviewText.length }} chars</span>
+        </div>
+        <textarea [(ngModel)]="reviewText" name="reviewText" rows="7" 
+                  placeholder="Detail your authentic day-to-day use. Include how long you've used it, primary pros and cons, real-world performance, and who this product is best suited for..." 
+                  required></textarea>
+        <small>Minimum 10 characters. Rich, evidence-based details score higher on authenticity audits.</small>
+      </div>
+
+      <!-- Error Toast -->
+      <div class="alert alert-danger" *ngIf="error">
+        <span>{{ error }}</span>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions-row">
+        <button type="submit" class="button button-primary button-lg" [disabled]="loading">
+          <svg *ngIf="!loading" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+          <span>{{ loading ? 'Running Authenticity Diagnostics...' : 'Submit Evaluation for Analysis →' }}</span>
+        </button>
+        <a routerLink="/user/dashboard" class="button button-light">Cancel</a>
+      </div>
+    </form>
+  </section>
+
+  <!-- Sidebar Tips -->
+  <aside class="tips-sidebar">
+    <div class="portal-card">
+      <div class="tip-card-header">
+        <div class="tip-icon">⛨</div>
+        <h3>Scoring High Credibility</h3>
+      </div>
+      <p class="tip-sub">Our AI evaluates semantic depth, natural sentiment flow, and balanced specifics.</p>
+
+      <ul class="guidelines-list">
+        <li>
+          <span class="check-icon">✓</span>
+          <div>
+            <b>Specify usage duration</b>
+            <p>e.g. “After 6 weeks of daily commuting...”</p>
+          </div>
+        </li>
+        <li>
+          <span class="check-icon">✓</span>
+          <div>
+            <b>Highlight real trade-offs</b>
+            <p>Mention both strengths and honest limitations.</p>
+          </div>
+        </li>
+        <li>
+          <span class="check-icon">✓</span>
+          <div>
+            <b>Include factual parameters</b>
+            <p>Battery longevity, dimensions, temperatures, decibels, etc.</p>
+          </div>
+        </li>
+      </ul>
     </div>
 
-    <div class="form-group">
-      <label>Category</label>
-      <select [(ngModel)]="category" name="category">
-        <option *ngFor="let cat of categories">{{ cat }}</option>
-      </select>
+    <div class="portal-card trust-pledge-card">
+      <h4>Our Independence Guarantee</h4>
+      <p>Credify never accepts sponsorships or payments to suppress negative reviews or artificially inflate ratings.</p>
     </div>
-
-    <div class="form-group">
-      <label>Review Headline / Title *</label>
-      <input type="text" [(ngModel)]="headline" name="headline" placeholder="e.g. Exceptional noise cancellation with solid battery life" required>
-    </div>
-
-    <div class="form-group">
-      <label>Satisfaction Rating (1 to 5 Stars) *</label>
-      <select [(ngModel)]="ratingValue" name="ratingValue">
-        <option [ngValue]="5">★★★★★ (5 Stars - Excellent)</option>
-        <option [ngValue]="4">★★★★☆ (4 Stars - Good)</option>
-        <option [ngValue]="3">★★★☆☆ (3 Stars - Average)</option>
-        <option [ngValue]="2">★★☆☆☆ (2 Stars - Below Average)</option>
-        <option [ngValue]="1">★☆☆☆☆ (1 Star - Poor)</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Detailed Evaluation & Experience *</label>
-      <textarea [(ngModel)]="reviewText" name="reviewText" rows="6" placeholder="Describe your actual experience, pros, cons, usage duration, and key observations..." required></textarea>
-      <small>Minimum 10 characters. Detailed, objective reviews earn higher credibility scores.</small>
-    </div>
-
-    <p class="form-error" *ngIf="error">{{ error }}</p>
-
-    <button type="submit" class="button button-primary" [disabled]="loading">
-      {{ loading ? 'Analyzing & Publishing...' : 'Submit Evaluation →' }}
-    </button>
-  </form>
+  </aside>
 </div>

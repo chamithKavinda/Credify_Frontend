@@ -1,103 +1,117 @@
-<div class="page-container">
-  <!-- Page Header -->
-  <header class="page-header">
-    <div class="header-content">
-      <h1>User Management</h1>
-      <p>View contributors, manage account statuses, and grant reputation badges.</p>
-    </div>
-  </header>
+<section class="portal-header">
+  <div>
+    <span class="kicker">IDENTITY & ACCESS GOVERNANCE</span>
+    <h1>User Accounts</h1>
+    <p>View registered contributors, inspect reputation metrics, manage account statuses, and award system badges.</p>
+  </div>
+  <button class="button button-light button-sm" (click)="loadUsers()" [disabled]="loading">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+    </svg>
+    <span>Refresh Users</span>
+  </button>
+</section>
 
-  <!-- Alert Message -->
-  <div class="alert alert-success" *ngIf="message">
-    <span class="alert-icon">✓</span>
-    {{ message }}
+<!-- Alert Message -->
+<div class="alert alert-success" *ngIf="message">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </svg>
+  <span>{{ message }}</span>
+</div>
+
+<!-- Main Card -->
+<div class="portal-card">
+  <!-- Card Toolbar -->
+  <div class="user-toolbar">
+    <div class="toolbar-search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search by name, email, role...">
+    </div>
+
+    <div class="toolbar-badge-award" *ngIf="badges.length > 0">
+      <label for="badgeSelect">Award Badge:</label>
+      <select id="badgeSelect" [(ngModel)]="selectedBadgeId">
+        <option *ngFor="let b of badges" [value]="b.id">{{ b.badgeName }}</option>
+      </select>
+    </div>
   </div>
 
-  <!-- Main Card -->
-  <div class="card">
-    <!-- Card Toolbar -->
-    <div class="card-toolbar">
-      <div class="toolbar-title">
-        <h2>Registered Users</h2>
-        <span class="count-pill">{{ users.length }}</span>
-      </div>
-      
-      <div class="toolbar-actions" *ngIf="badges.length > 0">
-        <label for="badgeSelect">Award Badge:</label>
-        <select id="badgeSelect" [(ngModel)]="selectedBadgeId" class="modern-select">
-          <option value="" disabled selected>Select a badge...</option>
-          <option *ngFor="let b of badges" [value]="b.id">{{ b.badgeName }}</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Data Table -->
-    <div class="table-responsive" *ngIf="!loading && users.length > 0">
-      <table class="modern-table">
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Role & Reputation</th>
-            <th>Status</th>
-            <th>Joined</th>
-            <th class="text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let u of users">
-            
-            <!-- User Profile Column -->
-            <td>
-              <div class="user-profile">
-                <div class="avatar">{{ u.firstName[0] }}{{ u.lastName[0] }}</div>
-                <div class="user-details">
-                  <span class="user-name">{{ u.firstName }} {{ u.lastName }}</span>
-                  <span class="user-email">{{ u.email }}</span>
-                </div>
+  <!-- Users Table -->
+  <div class="table-responsive" *ngIf="!loading && filteredUsers.length > 0">
+    <table class="portal-table">
+      <thead>
+        <tr>
+          <th>User Profile</th>
+          <th>Role & Trust Score</th>
+          <th>Account Status</th>
+          <th>Joined Date</th>
+          <th style="text-align: right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of filteredUsers">
+          <td>
+            <div class="user-cell">
+              <div class="user-avatar-circle">
+                {{ (u.firstName || 'U')[0] }}{{ (u.lastName || '')[0] }}
               </div>
-            </td>
-
-            <!-- Role & Reputation Column -->
-            <td>
-              <div class="role-rep">
-                <span class="badge role-badge">{{ u.role }}</span>
-                <span class="rep-score">⛨ {{ u.reputationScore || 0 }}</span>
+              <div class="user-cell-meta">
+                <span class="user-cell-name">{{ u.firstName }} {{ u.lastName }}</span>
+                <span class="user-cell-email">{{ u.email }}</span>
               </div>
-            </td>
+            </div>
+          </td>
 
-            <!-- Status Column -->
-            <td>
-              <span class="badge status-badge" 
-                    [ngClass]="u.accountStatus === 'ACTIVE' ? 'status-active' : 'status-suspended'">
-                {{ u.accountStatus | titlecase }}
+          <td>
+            <div class="role-rep-cell">
+              <span class="status-badge" [ngClass]="u.role === 'ADMIN' ? 'role-badge' : ''">
+                {{ u.role }}
               </span>
-            </td>
+              <span class="trust-meter-pill">
+                ⛨ {{ u.reputationScore || 0 }} / 100
+              </span>
+            </div>
+          </td>
 
-            <!-- Date Column -->
-            <td class="text-muted">{{ u.createdAt | date:'mediumDate' }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="u.accountStatus === 'ACTIVE' ? 'status-active' : 'status-suspended'">
+              {{ u.accountStatus | titlecase }}
+            </span>
+          </td>
 
-            <!-- Actions Column -->
-            <td class="actions-cell">
-              <button class="btn btn-ghost" (click)="awardBadge(u.id)" *ngIf="badges.length > 0" title="Award Badge">
-                🎖️ Award
+          <td>
+            <span class="date-text">{{ u.createdAt | date:'mediumDate' }}</span>
+          </td>
+
+          <td style="text-align: right;">
+            <div class="user-actions">
+              <button class="button button-light button-sm" (click)="awardBadge(u.id)" *ngIf="badges.length > 0" title="Award selected badge to user">
+                <span>🎖️ Award</span>
               </button>
-              <button class="btn" 
-                      [ngClass]="u.accountStatus === 'ACTIVE' ? 'btn-danger' : 'btn-success'" 
+              <button class="button button-sm" 
+                      [ngClass]="u.accountStatus === 'ACTIVE' ? 'button-danger' : 'button-success'"
                       (click)="toggleStatus(u)" 
                       *ngIf="u.role !== 'ADMIN'">
-                {{ u.accountStatus === 'SUSPENDED' ? 'Reactivate' : 'Suspend' }}
+                <span>{{ u.accountStatus === 'SUSPENDED' ? 'Reactivate' : 'Suspend' }}</span>
               </button>
-            </td>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="empty-state" *ngIf="!loading && filteredUsers.length === 0">
+    <div class="empty-icon">👥</div>
+    <h3>No Users Found</h3>
+    <p>No user accounts matched your search criteria.</p>
+  </div>
 
-    <!-- Empty / Loading State -->
-    <div class="loading-state" *ngIf="loading">
-      <div class="spinner"></div>
-      <p>Loading user accounts...</p>
-    </div>
+  <div class="empty-state" *ngIf="loading">
+    <p>Loading user accounts...</p>
   </div>
 </div>

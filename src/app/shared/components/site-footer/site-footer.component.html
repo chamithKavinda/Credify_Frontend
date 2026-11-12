@@ -1,9 +1,71 @@
 <footer class="site-footer">
+  <div class="footer-container">
     <div class="footer-main">
-      <div class="footer-brand"><a routerLink="/" class="brand"><span class="brand-mark">✓</span> Credify <i></i></a><p>Reviews with more context. Decisions with more confidence.</p><b>⛨ Independent AI Authenticity Verification</b></div>
-      <div><h4>Product</h4><a href="#featured">Explore</a><a href="#how-it-works">How It Works</a><a href="#how-it-works">Authenticity AI</a><a href="#how-it-works">Community Guidelines</a></div>
-      <div><h4>For Businesses</h4><a href="#">Claim Profile</a><a href="#">Trust Intelligence</a><a href="#">Integrations</a><a href="#">Business Pricing</a></div>
-      <div><h4>Trust & Safety</h4><a href="#">Integrity Report</a><a href="#">Audit Criteria</a><a href="#">Report Fraud</a><a href="#">Appeal a Review</a></div>
+      <div class="footer-brand">
+        <a routerLink="/" class="brand">
+          <span class="brand-mark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </span>
+          <span class="brand-name">Credify</span>
+        </a>
+        <p class="footer-tagline">Reviews with genuine context. Decisions with objective confidence.</p>
+        <div class="trust-badge-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>Independent AI Authenticity Network</span>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h4>Explore Platform</h4>
+        <a routerLink="/search">Browse Reviews</a>
+        <a routerLink="/how-it-works">How Credify Works</a>
+        <a routerLink="/search" [queryParams]="{ category: 'Audio & Wearables' }">Audio & Wearables</a>
+        <a routerLink="/search" [queryParams]="{ category: 'Computing & Laptops' }">Computing Gear</a>
+      </div>
+
+      <div class="footer-column">
+        <h4>Portals & Tools</h4>
+        <a routerLink="/user/dashboard">Contributor Portal</a>
+        <a routerLink="/user/submit-review">Submit Evaluation</a>
+        <a routerLink="/admin/reviews">Admin Moderation</a>
+        <a routerLink="/sign-in">Sign In / Register</a>
+      </div>
+
+      <div class="footer-column">
+        <h4>Trust & Integrity</h4>
+        <a routerLink="/how-it-works">Linguistic Heuristics</a>
+        <a routerLink="/how-it-works">Temporal Anomaly Checks</a>
+        <a routerLink="/how-it-works">Reputation Standards</a>
+        <a routerLink="/how-it-works">Community Guidelines</a>
+      </div>
     </div>
-    <div class="footer-bottom"><span>© 2026 Credify Technologies Inc. All rights reserved.</span><span><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookie Settings</a></span></div>
-  </footer>
+
+    <div class="footer-bottom">
+      <p class="copyright">© 2026 Credify Technologies Inc. All rights reserved.</p>
+      <div class="footer-legal-links">
+        <a routerLink="/how-it-works">Privacy Policy</a>
+        <span class="sep">·</span>
+        <a routerLink="/how-it-works">Terms of Service</a>
+        <span class="sep">·</span>
+        <a routerLink="/how-it-works">Audit Standards</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Scroll To Top Button -->
+  <button 
+    type="button" 
+    class="scroll-to-top-btn" 
+    [class.visible]="showScrollTop" 
+    (click)="scrollToTop()" 
+    aria-label="Scroll to top of page"
+    title="Back to top">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+</footer>

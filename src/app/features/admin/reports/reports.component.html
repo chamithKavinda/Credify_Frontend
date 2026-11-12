@@ -1,119 +1,123 @@
-<div class="page-container">
-  <!-- Page Header -->
-  <header class="page-header">
-    <div class="header-content">
-      <h1>Flagged Reports</h1>
-      <p>Review community-reported reviews for spam, policy violations, or suspicious manipulation.</p>
-    </div>
-  </header>
+<section class="portal-header">
+  <div>
+    <span class="kicker">COMMUNITY GOVERNANCE</span>
+    <h1>Flagged Reports</h1>
+    <p>Review community-flagged submissions for spam, policy violations, or artificial review manipulation.</p>
+  </div>
+  <button class="button button-light button-sm" (click)="loadReports()" [disabled]="loading">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+    </svg>
+    <span>Refresh</span>
+  </button>
+</section>
 
-  <!-- Filter Tabs -->
-  <div class="filter-tabs">
-    <button class="tab-btn" [class.active]="statusFilter==='OPEN'" (click)="statusFilter='OPEN'; loadReports()">
-      Open Reports
-    </button>
-    <button class="tab-btn" [class.active]="statusFilter==='REVIEWED'" (click)="statusFilter='REVIEWED'; loadReports()">
-      Reviewed
-    </button>
-    <button class="tab-btn" [class.active]="statusFilter==='DISMISSED'" (click)="statusFilter='DISMISSED'; loadReports()">
-      Dismissed
-    </button>
+<!-- Filter Navigation Pills -->
+<div class="filter-pills-row">
+  <button class="pill-btn" [class.active]="statusFilter==='OPEN'" (click)="statusFilter='OPEN'; loadReports()">
+    <span class="pill-dot warning-dot"></span>
+    <span>Open Reports</span>
+  </button>
+  <button class="pill-btn" [class.active]="statusFilter==='REVIEWED'" (click)="statusFilter='REVIEWED'; loadReports()">
+    <span class="pill-dot success-dot"></span>
+    <span>Reviewed</span>
+  </button>
+  <button class="pill-btn" [class.active]="statusFilter==='DISMISSED'" (click)="statusFilter='DISMISSED'; loadReports()">
+    <span class="pill-dot neutral-dot"></span>
+    <span>Dismissed</span>
+  </button>
+</div>
+
+<!-- Alert Message -->
+<div class="alert alert-success" *ngIf="message">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </svg>
+  <span>{{ message }}</span>
+</div>
+
+<!-- Main Card -->
+<div class="portal-card">
+  <div class="card-toolbar-row">
+    <div>
+      <h2>{{ statusFilter | titlecase }} Reports</h2>
+      <p class="toolbar-sub">Displaying records in {{ statusFilter | lowercase }} status.</p>
+    </div>
+    <span class="count-badge">{{ reports.length }} reports</span>
   </div>
 
-  <!-- Alert Message -->
-  <div class="alert alert-success" *ngIf="message">
-    <span class="alert-icon">✓</span>
-    {{ message }}
-  </div>
-
-  <!-- Main Card -->
-  <div class="card">
-    <!-- Card Toolbar -->
-    <div class="card-toolbar">
-      <div class="toolbar-title">
-        <h2>{{ statusFilter | titlecase }} Reports</h2>
-        <span class="count-pill">{{ reports.length }}</span>
-      </div>
-    </div>
-
-    <!-- Data Table -->
-    <div class="table-responsive" *ngIf="!loading && reports.length > 0">
-      <table class="modern-table">
-        <thead>
-          <tr>
-            <th>Review ID</th>
-            <th>Reporter</th>
-            <th>Reason for Flag</th>
-            <th>Status</th>
-            <th>Reported On</th>
-            <th class="text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let rep of reports">
-            
-            <!-- Review ID -->
-            <td>
-              <a [routerLink]="['/reviews', rep.reviewId]" class="id-link" title="View Review">
-                <span class="id-icon">↗</span> {{ rep.reviewId }}
-              </a>
-            </td>
-
-            <!-- Reporter ID -->
-            <td>
-              <span class="reporter-id">{{ rep.reporterUserId }}</span>
-            </td>
-
-            <!-- Reason -->
-            <td>
-              <span class="report-reason">{{ rep.reason }}</span>
-            </td>
-
-            <!-- Status -->
-            <td>
-              <span class="badge status-badge" 
-                    [ngClass]="{
-                      'status-open': rep.status === 'OPEN',
-                      'status-reviewed': rep.status === 'REVIEWED',
-                      'status-dismissed': rep.status === 'DISMISSED'
-                    }">
-                {{ rep.status | titlecase }}
+  <div class="table-responsive" *ngIf="!loading && reports.length > 0">
+    <table class="portal-table">
+      <thead>
+        <tr>
+          <th>Target Review</th>
+          <th>Reporter ID</th>
+          <th>Reason for Flag</th>
+          <th>Status</th>
+          <th>Reported At</th>
+          <th style="text-align: right;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rep of reports">
+          <td>
+            <a [routerLink]="['/reviews', rep.reviewId]" class="review-link" title="Open and inspect review">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+              <span>Review #{{ rep.reviewId }}</span>
+            </a>
+          </td>
+          <td>
+            <code class="reporter-tag">{{ rep.reporterUserId }}</code>
+          </td>
+          <td>
+            <span class="flag-reason-box">{{ rep.reason }}</span>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="{
+              'pending': rep.status === 'OPEN',
+              'status-active': rep.status === 'REVIEWED',
+              'status-suspended': rep.status === 'DISMISSED'
+            }">
+              {{ rep.status | titlecase }}
+            </span>
+          </td>
+          <td>
+            <span class="date-text">{{ rep.createdAt | date:'medium' }}</span>
+          </td>
+          <td style="text-align: right;">
+            <div class="actions-group" *ngIf="rep.status === 'OPEN'; else resolvedState">
+              <button class="button button-success button-sm" (click)="resolve(rep.id, 'REVIEWED')">
+                <span>Mark Reviewed</span>
+              </button>
+              <button class="button button-light button-sm" (click)="resolve(rep.id, 'DISMISSED')">
+                <span>Dismiss</span>
+              </button>
+            </div>
+            <ng-template #resolvedState>
+              <span class="resolved-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>Resolved</span>
               </span>
-            </td>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-            <!-- Date -->
-            <td class="text-muted">{{ rep.createdAt | date:'short' }}</td>
+  <div class="empty-state" *ngIf="!loading && reports.length === 0">
+    <div class="empty-icon">✓</div>
+    <h3>No {{ statusFilter | titlecase }} Reports</h3>
+    <p>There are no reports currently logged under {{ statusFilter | lowercase }} status.</p>
+  </div>
 
-            <!-- Actions -->
-            <td class="actions-cell">
-              <ng-container *ngIf="rep.status === 'OPEN'; else resolvedState">
-                <button class="btn btn-success" (click)="resolve(rep.id, 'REVIEWED')">
-                  Mark Reviewed
-                </button>
-                <button class="btn btn-ghost" (click)="resolve(rep.id, 'DISMISSED')">
-                  Dismiss
-                </button>
-              </ng-container>
-              <ng-template #resolvedState>
-                <span class="resolved-text">✓ Resolved</span>
-              </ng-template>
-            </td>
-
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Empty State -->
-    <div class="empty-state" *ngIf="!loading && reports.length === 0">
-      <div class="empty-icon">📭</div>
-      <p>No {{ statusFilter.toLowerCase() }} reports found.</p>
-    </div>
-
-    <!-- Loading State -->
-    <div class="loading-state" *ngIf="loading">
-      <div class="spinner"></div>
-      <p>Loading reports...</p>
-    </div>
+  <div class="empty-state" *ngIf="loading">
+    <p>Loading reports data...</p>
   </div>
 </div>

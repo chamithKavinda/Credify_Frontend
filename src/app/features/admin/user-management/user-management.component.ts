@@ -5,7 +5,6 @@ import { SystemBadge } from '../../../shared/models/dashboard.model';
 
 @Component({
   selector: 'app-user-management',
-  standalone: false,
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css']
 })
@@ -15,6 +14,7 @@ export class UserManagementComponent implements OnInit {
   loading = true;
   message = '';
   selectedBadgeId = '';
+  searchTerm = '';
 
   constructor(private adminService: AdminService) {}
 
@@ -26,6 +26,17 @@ export class UserManagementComponent implements OnInit {
         if (data.length > 0) this.selectedBadgeId = data[0].id;
       }
     });
+  }
+
+  get filteredUsers(): User[] {
+    if (!this.searchTerm) return this.users;
+    const term = this.searchTerm.toLowerCase();
+    return this.users.filter(u =>
+      u.firstName?.toLowerCase().includes(term) ||
+      u.lastName?.toLowerCase().includes(term) ||
+      u.email?.toLowerCase().includes(term) ||
+      u.role?.toLowerCase().includes(term)
+    );
   }
 
   loadUsers(): void {
@@ -45,7 +56,7 @@ export class UserManagementComponent implements OnInit {
     this.adminService.updateUserStatus(user.id, newStatus).subscribe({
       next: () => {
         user.accountStatus = newStatus;
-        this.message = `Updated ${user.firstName} ${user.lastName} status to ${newStatus}.`;
+        this.message = `Updated ${user.firstName} ${user.lastName}'s account status to ${newStatus}.`;
       },
       error: (err) => {
         alert(err?.error?.message || 'Failed to update user status.');
